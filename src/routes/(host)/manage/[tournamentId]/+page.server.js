@@ -42,6 +42,19 @@ export const actions = {
 			success: true
 		}
 	},
+	deleteParticipant: async({ request, locals}) => {
+		const { id } = Object.fromEntries(await request.formData());
+		console.log(id)
+		try {
+			await locals.pb.collection('participants').delete(id);
+		} catch (err) {
+			console.log('Error: ', err);
+			throw error(err.status, err.message);
+		}
+		return {
+			success: true
+		};
+	},
 	updateTournament: async ({ request, locals, params }) => {
 		const formData = await request.formData();
 

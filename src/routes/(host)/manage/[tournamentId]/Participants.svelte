@@ -1,16 +1,16 @@
 <script>
     export let tournament 
-    import { enhance } from '$app/forms'; 
+	import { enhance } from '$app/forms';
     import toast from 'svelte-french-toast';
-    import { DotsHorizontalOutline, DotsVerticalOutline, GearSolid } from 'flowbite-svelte-icons'
-
+    import { DotsHorizontalOutline, DotsVerticalOutline, ExclamationCircleOutline, UsersSolid, TrashBinSolid} from 'flowbite-svelte-icons'
+ 
     import {  Modal, Label, Input, Checkbox, Select, Button, Hr, Helper, Listgroup, ListgroupItem, Avatar, ButtonGroup, InputAddon, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell, Textarea } from 'flowbite-svelte'
     const { participant_type } = tournament
     let playerModal = false 
     let selectedTeam = {}
     let participants = tournament?.expand?.['participants(tournament)'] ?? []
     let loading = false;
-
+    let deleteParticipantModal = false
     const handleCreateParticipant = () => {
         loading = true;
         return async ({ result, update }) => { 
@@ -45,9 +45,8 @@
 
     }
 </script>
-
 {#if participant_type === 'team'}    
-<form class="space-y-2 mb-4" action="?/createParticipant" method="POST" use:enhance={handleCreateParticipant}>
+<form class="space-y-2 mb-4" action="?/createParticipant" method="POST">
     <Label>Team details</Label>
     <ButtonGroup class="w-full"> 
         <Input  type="text" name="name" placeholder="Team name" required />
@@ -60,19 +59,22 @@
     <TableHead> 
             <TableHeadCell>Name</TableHeadCell>
             <TableHeadCell>Link</TableHeadCell>
-            <TableHeadCell>Players</TableHeadCell> 
+            <TableHeadCell> </TableHeadCell>  
     </TableHead>
     <TableBody>
         {#each participants as participant} 
             <TableBodyRow> 
                 <TableBodyCell>{participant.name}</TableBodyCell>
                 <TableBodyCell>{participant.social ?? ''}</TableBodyCell>
-                <TableBodyCell><Button on:click={()=> handleTeamClick(participant)}>Players</Button></TableBodyCell>
+                <TableBodyCell>
+                    <Button size="sm" on:click={()=> handleTeamClick(participant)}><UsersSolid size="sm"></UsersSolid></Button>
+                    <Button size="sm" on:click={()=> {deleteParticipantModal=true; selectedTeam=participant; console.log(selectedTeam)}}><TrashBinSolid size="sm"></TrashBinSolid></Button>
+                </TableBodyCell> 
             </TableBodyRow>
         {/each} 
     </TableBody>
 </Table>
- 
+
   
   <Modal bind:open={playerModal} size="lg" autoclose={false} class="w-full">
     <form class="space-y-2 mb-4" on:submit|preventDefault={handleAddPlayer}>
@@ -106,7 +108,17 @@
     </Table>
   </Modal>
 {/if}
-
+<Modal bind:open={deleteParticipantModal} size="xs" autoclose={false}>
+    <div class="text-center">
+        <ExclamationCircleOutline class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" />
+        <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Are you sure you want to delete {selectedTeam.name}?</h3> 
+        <form action="?/deleteParticipant" method="POST">  
+            <input type="hidden" name="id" value={selectedTeam.id}>
+            <Button type="submit" color="primary" class="me-2">Yes</Button>
+            <Button type="button" on:click={()=>{selectedTeam={}}} color="alternative">Cancel</Button>
+        </form>
+    </div>
+</Modal> 
 
 {#if participant_type === 'player'}
 <form class="space-y-2 mb-4" action="?/createParticipant" method="POST">
@@ -132,7 +144,9 @@
                 <TableBodyCell>{participant.name ?? ''}</TableBodyCell>
                 <TableBodyCell>{participant.identifier ?? ''}</TableBodyCell>
                 <TableBodyCell>{participant.social ?? ''}</TableBodyCell>
-                <TableBodyCell><DotsVerticalOutline/></TableBodyCell>
+                <TableBodyCell>
+                    <Button size="sm" on:click={()=> {deleteParticipantModal=true; selectedTeam=participant; console.log(selectedTeam)}}><TrashBinSolid size="sm"></TrashBinSolid></Button>
+                </TableBodyCell>
             </TableBodyRow>
         {/each} 
     </TableBody>
