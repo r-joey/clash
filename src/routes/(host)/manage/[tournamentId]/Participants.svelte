@@ -1,5 +1,7 @@
 <script>
-    export let tournament
+    export let tournament 
+    import { enhance } from '$app/forms'; 
+    import toast from 'svelte-french-toast';
     import { DotsHorizontalOutline, DotsVerticalOutline, GearSolid } from 'flowbite-svelte-icons'
 
     import {  Modal, Label, Input, Checkbox, Select, Button, Hr, Helper, Listgroup, ListgroupItem, Avatar, ButtonGroup, InputAddon, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell, Textarea } from 'flowbite-svelte'
@@ -7,7 +9,25 @@
     let playerModal = false 
     let selectedTeam = {}
     let participants = tournament?.expand?.['participants(tournament)'] ?? []
-    
+    let loading = false;
+
+    const handleCreateParticipant = () => {
+        loading = true;
+        return async ({ result, update }) => { 
+            console.log(result)
+        switch (result.type) { 
+            case 'success':
+                await update();
+                break; 
+            case 'error': 
+                toast.error(result.error.message); 
+                break;
+            default:
+                await update();
+        }
+        loading = false;
+        };
+    };
     const handleTeamClick = (team) => { 
         selectedTeam = team
         playerModal = true
@@ -17,6 +37,7 @@
         const newPlayer = Object.fromEntries(new FormData(event.target) )
         console.log(newPlayer)
         selectedTeam.players = [...selectedTeam.players ?? [], newPlayer]
+        event.target.reset()
         // teamPlayersList = selectedTeam.players
         // console.log(teamPlayersList)
         // console.log(selectedTeam)
@@ -26,7 +47,7 @@
 </script>
 
 {#if participant_type === 'team'}    
-<form class="space-y-2 mb-4" action="?/createParticipant" method="POST">
+<form class="space-y-2 mb-4" action="?/createParticipant" method="POST" use:enhance={handleCreateParticipant}>
     <Label>Team details</Label>
     <ButtonGroup class="w-full"> 
         <Input  type="text" name="name" placeholder="Team name" required />
@@ -46,7 +67,7 @@
             <TableBodyRow> 
                 <TableBodyCell>{participant.name}</TableBodyCell>
                 <TableBodyCell>{participant.social ?? ''}</TableBodyCell>
-                <TableBodyCell><Button on:click={()=> handleTeamClick(participant)}>{participant.players?.players?.length ?? '0'} Players</Button></TableBodyCell>
+                <TableBodyCell><Button on:click={()=> handleTeamClick(participant)}>Players</Button></TableBodyCell>
             </TableBodyRow>
         {/each} 
     </TableBody>
