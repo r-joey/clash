@@ -15,25 +15,7 @@
     let selectedTeam = null
     let deleteParticipantModal = false
 
-    const handleCreateParticipant = () => {
-        loading = true;
-        return async ({ result, update }) => { 
-            console.log(result)
-            await applyAction(result)
-        // switch (result.type) { 
-        //     case 'success':
-        //         await update();
-        //         break; 
-        //     case 'error': 
-        //         toast.error(result.error.message); 
-        //         break;
-        //     default:
-        //         await applyAction();
-        // }
-        loading = false;
-        };
-    }; 
- 
+  
     // Player area 
     let playerEditMode = false
     let selectedPlayer = null
@@ -48,7 +30,7 @@
 <!-- Team starts -->
 {#if participant_type === 'team'}    
     {#if !teamEditMode}    
-    <form class="space-y-2 mb-4" action="?/createParticipant" method="POST" use:enhance>
+    <form class="space-y-2 mb-4" action="?/createParticipant" method="POST">
         <Label>Team details</Label>
         <ButtonGroup class="w-full"> 
             <Input  type="text" name="name" placeholder="Team name" required /> 
