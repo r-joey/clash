@@ -21,12 +21,13 @@
 
     const matchClicked = (match) => {
       console.log(match)
+      console.log('stages', stages)
     } 
     
 </script>
 
 <StagesModal  {tournament}/>
 {#each stages as stage,idx  }
-  <Button on:click={()=>renderBracket(stage.data)}>{`Stage ${idx+1}`}</Button>
+  <Button on:click={()=>renderBracket(stage.data)}>{stage.data.stage[0].name}</Button>
 {/each}
-<div class="brackets-viewer"></div>
+<div class="brackets-viewer mt-5 rounded-md"></div>

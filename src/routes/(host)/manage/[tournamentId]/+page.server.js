@@ -8,7 +8,6 @@ import { InMemoryDatabase } from 'brackets-memory-db';
  
 export async function load({locals, params}) { 
 
- 
     try {
         const tournament = serializeNonPOJOs(await locals.pb.collection('tournaments').getOne(params.tournamentId, {
 			expand: 'participants(tournament), stages(tournament)'
@@ -30,7 +29,7 @@ export const actions = {
 	createParticipant : async ({ request, locals, params }) => {
 		const formData =  await request.formData()  
 	 
-		formData.append('tournament', params.tournamentId)
+		formData.append('tournament', params.tournamentId) 
         try{
             await locals.pb.collection('participants').create(formData)
         } catch (err) { 
@@ -39,6 +38,18 @@ export const actions = {
              
         }  
         return {
+			success: true
+		}
+	},
+	editParticipant : async ({ request, locals }) => {
+		const formData =  await request.formData() 
+		try {
+			await locals.pb.collection('participants').update(formData.get('id'), formData);
+		} catch (err) {
+			console.log('Error', err)
+			throw error(err.status, err.message);
+		}
+		return {
 			success: true
 		}
 	},
