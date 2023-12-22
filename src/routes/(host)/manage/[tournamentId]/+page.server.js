@@ -121,6 +121,7 @@ export const actions = {
 			}
 		} catch (err) {
 			console.log(err)
+			throw error(err.status, err.message)
 		}
 
 		

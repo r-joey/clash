@@ -3,10 +3,7 @@
     export let tournament 
 
     let participants = tournament?.expand?.['participants(tournament)'] ?? []
-    let createStageModal = false 
-    console.log('modal')
-    console.log(participants)
-
+    let createStageModal = false  
  
     let tournamentParticipants = participants ? participants.map((participant)=>({ value: participant.id, name: participant.name})) : null
     
@@ -111,11 +108,11 @@
             } )
         }
 </script>
-<div class="flex flex-col items-center justify-center">
-    <Button outline on:click={() => (createStageModal = true)}>Add stage</Button>
-</div>
+<!-- <div class="flex flex-col items-center justify-center">
+</div> -->
+<Button outline on:click={() => (createStageModal = true)}>Add stage</Button>
 
-<Modal bind:open={createStageModal} size="md" autoclose={false} class="w-full">
+<Modal bind:open={createStageModal} size="lg" autoclose={false} class="w-full h-2/3">
     <!-- <form class="flex flex-col space-y-6" on:submit={createStage}> -->
     <form class="flex flex-col space-y-6" action="?/createStage" method="POST" enctype="multipart/form-data">
       <h3 class="text-xl font-medium text-gray-900 dark:text-white">Create a stage</h3>
