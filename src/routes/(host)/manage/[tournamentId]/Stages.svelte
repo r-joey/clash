@@ -18,7 +18,7 @@
     let winner = null
 
     onMount(() => {
-      if (stages) {
+      if (stages && stages.length > 0) {
         active_stage = stages[stages.length - 1]
         renderBracket(active_stage.data)
         selectedBracket = active_stage.data
@@ -71,25 +71,34 @@
     <h3 class="font-bold">vs</h3>
     <h3 class="text-orange-500 text-3xl font-bold">{opp2.name}</h3>
   </div>
- <!-- {#each selectedmatch?.metadata?.games ?? [] as game }
-    <Button outline class="mr-2">Game {game.number}</Button>
- {/each}
- <div>
-   <Label>Opponent 1</Label>
-   <NumberInput></NumberInput>
-   <Label>Opponent 2</Label>
-   <NumberInput></NumberInput> 
-  </div> -->
-<Tabs style="full" defaultClass="flex rounded-lg divide-x rtl:divide-x-reverse divide-gray-200 shadow dark:divide-gray-700">
+ 
+<Tabs >
   {#each selectedmatch?.metadata?.games ?? [] as game, index}
-  <TabItem class="w-full" open={index === 0 ? true : false}>
+
+
+  <TabItem open={index === 0 ? true : false} title={`Game ${game.number}`}>
+    <p class="text-sm text-gray-500 dark:text-gray-400">
+      <b>{game.opponent1.id}</b>
+      <b>{game.opponent2.id}</b>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+    </p>
+  </TabItem>
+
+
+  {/each} 
+
+  
+</Tabs> 
+</Modal>
+  
+  <!-- <TabItem open={index === 0 ? true : false}>
     <span slot="title">Game {game.number}</span> 
     <div class="mb-2 grid grid-cols-4">
       <div class='col-span-3'>
         <Label>{opp1.name}</Label>
         <NumberInput id={`${game.number}${game.opponent1.id}`}></NumberInput>
       </div>
-      <div class='col-span-1 flex items-center justify-center'> <!-- Use flex and items-center to center the content -->
+      <div class='col-span-1 flex items-center justify-center'>  
         <Radio class="p-3" bind:group={winner} value={`${game.opponent1.id}`}>Winner</Radio>
       </div>
     </div>
@@ -98,7 +107,7 @@
         <Label>{opp2.name}</Label>
         <NumberInput id={`${game.number}${game.opponent2.id}`}></NumberInput>
       </div>
-      <div class="col-span-1 flex items-center justify-center"> <!-- Use flex and items-center to center the content -->
+      <div class="col-span-1 flex items-center justify-center">  
         <Radio class="p-3" bind:group={winner} value={`${game.opponent2.id}`}>Winner</Radio>
       </div> 
     </div>
@@ -111,11 +120,4 @@
       <Textarea name="additional_info"></Textarea> 
     </div>
     
-  </TabItem>
-{/each} 
-</Tabs>
-  <svelte:fragment slot="footer">
-    <Button on:click={() => alert('Handle "success"')}>Save</Button>
-    <Button color="alternative">Cancel</Button>
-  </svelte:fragment>
-</Modal>
+  </TabItem> -->

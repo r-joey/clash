@@ -92,8 +92,8 @@ export const actions = {
 			}))  
 			const body = formBody(await request.formData())
 			const participantsFromDB = tournament?.expand?.['participants(tournament)'] ?? [] 
-			 const seedings = participantsFromDB.filter(item => body.seeding.includes(item.id));
-		 
+			const seedings = participantsFromDB.filter(item => body.seeding.includes(item.id));
+			
 			// manual convert into brackets-manager object 
 			const { name, seeding, type, seedOrdering, ...rest } = body; 
 			let config = {
@@ -102,7 +102,7 @@ export const actions = {
 				seeding: seedings,
 				type,
 				settings: {
-					seedOrdering: [seedOrdering],
+					seedOrdering: Array.isArray(seedOrdering) ? seedOrdering : [seedOrdering],
 					...rest
 				}
 			}; 
