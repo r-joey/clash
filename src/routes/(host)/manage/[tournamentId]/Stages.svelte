@@ -1,9 +1,11 @@
 <script>
     import { onMount } from "svelte";
     import StagesModal from "./StagesModal.svelte"; 
-    import { Radio, Tabs,TabItem, Modal, NumberInput, Label, Input, Checkbox, Select, Button, MultiSelect, ListgroupItem, Avatar, ButtonGroup, InputAddon, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell, Textarea } from 'flowbite-svelte'
+    import { Dropdown, DropdownItem, DropdownDivider, DropdownHeader, Radio, Tabs,TabItem, Modal, NumberInput, Label, Input, Checkbox, Select, Button, MultiSelect, ListgroupItem, Avatar, ButtonGroup, InputAddon, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell, Textarea } from 'flowbite-svelte'
     export let tournament  
     import { BracketsManager, helpers } from 'brackets-manager';
+    import { ChevronDownSolid } from 'flowbite-svelte-icons';
+    
 
     let stages = tournament?.expand?.['stages(tournament)'] ?? []
     let active_stage = null
@@ -53,7 +55,12 @@
 </script>
 
 {#each stages as stage,idx  }
-<Button class="mr-2" on:click={()=>{renderBracket(stage.data); selectedBracket = stage.data}}>{stage.data.stage[0].name}</Button>
+<Button class={`mr-2`} on:click={()=>{renderBracket(stage.data); selectedBracket = stage.data}}>{stage.data.stage[0].name}<ChevronDownSolid class={`w-3 h-3 ms-2 text-white dark:text-white stage_actions_trigger_${stage.id}`} /></Button>
+<Dropdown triggeredBy={`.stage_actions_trigger_${stage.id}`}>
+  <DropdownItem>Delete</DropdownItem>
+  <DropdownItem>Reset</DropdownItem> 
+</Dropdown>
+<!-- <Button class="mr-2" on:click={()=>{renderBracket(stage.data); selectedBracket = stage.data}}>{stage.data.stage[0].name}</Button> -->
 {/each}
 <StagesModal  {tournament}/>
 <div class="brackets-viewer mt-2 rounded-md"></div>
