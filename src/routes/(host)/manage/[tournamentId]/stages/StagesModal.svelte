@@ -1,5 +1,5 @@
 <script>
-    import {  Modal, Label, Input, Checkbox, Select, Button, MultiSelect, NumberInput, ListgroupItem, Avatar, ButtonGroup, InputAddon, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell, Textarea } from 'flowbite-svelte'
+    import { GradientButton, Modal, Label, Input, Checkbox, Select, Button, MultiSelect, NumberInput, ListgroupItem, Avatar, ButtonGroup, InputAddon, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell, Textarea } from 'flowbite-svelte'
     export let tournament 
 
     let participants = tournament?.expand?.['participants(tournament)'] ?? []
@@ -110,7 +110,7 @@
 </script>
 <!-- <div class="flex flex-col items-center justify-center">
 </div> -->
-<Button outline on:click={() => (createStageModal = true)}>Add stage</Button>
+<GradientButton color="pinkToOrange" size='sm' outline on:click={() => (createStageModal = true)}>Add stage</GradientButton>
 
 <Modal bind:open={createStageModal} size="lg" autoclose={false} class="w-full h-2/3">
     <!-- <form class="flex flex-col space-y-6" on:submit={createStage}> -->

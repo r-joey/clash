@@ -7,7 +7,7 @@
 
 <div class="rounded overflow-hidden shadow-lg bg-gray-900 text-gray-400"> 
     <div class="relative ">
-        <a href={`/manage/${tournament.id}`}>
+        <a href={`/manage/${tournament.id}/details`}>
             <img class="w-full h-60 object-cover"
                 src= {tournament?.cover ? getImageURL(tournament?.collectionId, tournament?.id, tournament?.cover, "0x0") : `https://miro.medium.com/v2/resize:fit:1200/1*RCux7YwbQaREA2313BevCg.jpeg`}
                 alt="Sunset in the mountains">
@@ -21,7 +21,7 @@
         </div>  
     </div>
     <div class="px-6 py-4"> 
-        <a href={`/manage/${tournament.id}`} class="font-semibold text-lg inline-block">
+        <a href={`/manage/${tournament.id}/details`} class="font-semibold text-lg inline-block">
             {tournament.name}
         </a>
         <p class="text-gray-500 font-bold text-sm">

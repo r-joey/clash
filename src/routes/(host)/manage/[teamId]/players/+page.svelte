@@ -29,7 +29,7 @@
 </script>
 
 <div class="flex items-center justify-center gap-2">
-    <Button href={`/manage/${data.team.tournament}`} size="sm" outline={true} pill={true}>
+    <Button href={`/manage/${data.team.tournament}/participants`} size="sm" outline={true} pill={true}>
         <ArrowLeftSolid size="sm"/>
     </Button> 
     <h3 class="text-white text-3xl font-bold">{data.team.name}</h3>

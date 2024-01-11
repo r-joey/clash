@@ -1,12 +1,14 @@
 <script>
+
+    export let data
+    const {tournament} = data
     import { getImageURL } from '$lib/utils' 
-    import { enhance } from '$app/forms'; 
+    import { enhance, applyAction } from '$app/forms'; 
     import toast from 'svelte-french-toast';
     import { Input, Label, Select, Button, Helper} from 'flowbite-svelte'
     import { PenSolid } from 'flowbite-svelte-icons'
     import { PUBLIC_TINY_MCE_API_KEY } from '$env/static/public'
-    import Editor from '@tinymce/tinymce-svelte';    
-    export let tournament 
+    import Editor from '@tinymce/tinymce-svelte';     
     let information = tournament.information ?? ''
     let loading = false
 
@@ -43,22 +45,25 @@
             preview.src = src
         }
     }
-    const submitUpdateTournament= () => {
+    const handleUpdateTournament = () => {
         loading = true;
-        return async ({ result, update }) => { 
-            console.log(result)
-        switch (result.type) {  
-            case 'error':  
-                toast.error(result.error.message);  
+        return async ({ result, update }) => {   
+        switch (result.type) { 
+            case 'success':
+                await update({reset: false});
+                toast.success("Tournament details successfully updated."); 
+                break; 
+            case 'error': 
+                toast.error(result.error.message); 
                 break;
             default:
-                await update();
+                break;
         }
-        loading = false;
+        loading = false; 
         };
-    };
+    }; 
 </script>
-<form action="?/updateTournament" method="POST" enctype="multipart/form-data"> 
+<form action="?/updateTournament" method="POST" enctype="multipart/form-data" use:enhance={handleUpdateTournament}> 
     <!-- COVER START -->
   <div class="relative">
       <div class="rounded-lg overflow-hidden"> 
@@ -76,7 +81,7 @@
   <div class="mt-4 grid gap-4 mb-4 sm:grid-cols-2">
     <div>
         <Label>Name</Label>
-        <Input value={tournament.name ?? ''} name='name' required></Input>
+        <Input type="text" value={tournament.name ?? ''} name='name' required></Input>
         
     </div>
     <div>

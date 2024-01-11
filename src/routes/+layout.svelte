@@ -3,7 +3,7 @@
   import { page } from '$app/stores';
   import { Toaster } from 'svelte-french-toast';
   import { getImageURL } from '$lib/utils' 
-  import { Button, Navbar, NavBrand, NavLi, NavUl, NavHamburger, Avatar, Dropdown, DropdownItem, DropdownHeader, DropdownDivider, ImagePlaceholder, Skeleton, TextPlaceholder } from 'flowbite-svelte';
+  import { GradientButton , Button, Navbar, NavBrand, NavLi, NavUl, NavHamburger, Avatar, Dropdown, DropdownItem, DropdownHeader, DropdownDivider, ImagePlaceholder, Skeleton, TextPlaceholder } from 'flowbite-svelte';
   $: activeUrl = $page.url.pathname;
   export let data  
 </script> 
@@ -15,7 +15,7 @@
   </NavBrand>
   <div class="flex md:order-2">
     {#if data.user}
-    <Button href="/create" outline class="mr-3">Creat</Button>
+    <GradientButton  href="/create" outline  color="pinkToOrange" class="mr-3">Creat</GradientButton>
     <Avatar border class="dark:ring-orange-500 hover:cursor-pointer" id="avatar-menu" src={data?.user?.avatar ? getImageURL(data.user?.collectionId, data.user?.id, data.user?.avatar, "100x100") : `https://ui-avatars.com/api/?name=JR?bold=true`} /> 
     {:else}
     <Button href="/login" size="sm">Login</Button>
