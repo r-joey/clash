@@ -3,8 +3,7 @@
     import StagesModal from "./StagesModal.svelte"; 
     import toast from 'svelte-french-toast';
     import { Dropdown, DropdownItem, DropdownDivider, DropdownHeader, Radio, Tabs,TabItem, Modal, NumberInput, Label, Input, Checkbox, Select, Button, MultiSelect, ListgroupItem, Avatar, ButtonGroup, InputAddon, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell, Textarea } from 'flowbite-svelte'
-    export let data
-    const { stages, participants } = data
+    export let data 
     import { BracketsManager, helpers } from 'brackets-manager';
     import { ChevronDownSolid } from 'flowbite-svelte-icons';
     
@@ -19,8 +18,8 @@
     let winner = null
 
     onMount(() => {
-      if (stages && stages.length > 0) {
-        active_stage = stages[stages.length - 1]
+      if (data?.stages && data?.stages.length > 0) {
+        active_stage = data?.stages[data?.stages.length - 1]
         renderBracket(active_stage.data)
         selectedBracket = active_stage.data
       }
@@ -58,14 +57,14 @@
 
 <div class="flex flex-col-1 gap-3 flex-wrap mb-3">
 
-  {#each stages as stage,idx  }
+  {#each data?.stages as stage,idx  }
   <Button color='light' size='sm' on:click={()=>{renderBracket(stage.data); selectedBracket = stage.data}}>{stage.data.stage[0].name}<ChevronDownSolid class={`w-3 h-3 ms-2 text-white dark:text-white stage_actions_trigger_${stage.id}`} /></Button>
   <Dropdown triggeredBy={`.stage_actions_trigger_${stage.id}`}>
     <DropdownItem>Delete</DropdownItem>
     <DropdownItem>Reset</DropdownItem> 
   </Dropdown> 
   {/each}
-  <StagesModal {participants} />
+  <StagesModal participants={data?.participants} />
 </div>
 
 <div class="brackets-viewer mt-2 rounded-md"></div>

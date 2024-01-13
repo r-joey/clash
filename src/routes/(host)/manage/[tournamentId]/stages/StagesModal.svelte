@@ -1,6 +1,7 @@
 <script>
     import { GradientButton, Modal, Label, Input, Checkbox, Select, Button, MultiSelect, NumberInput, ListgroupItem, Avatar, ButtonGroup, InputAddon, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell, Textarea } from 'flowbite-svelte'
     export let participants 
+ 
     import { enhance, applyAction } from '$app/forms';
     
     import toast from 'svelte-french-toast';
@@ -81,7 +82,7 @@
             switch (result.type) { 
                 case 'success':   
                     await update();  
-                    toast.success("Stage successfully created.");  
+                    toast.success("Stage successfully created.");   
                     break; 
                 case 'error': 
                     toast.error(result.error.message); 
@@ -94,8 +95,6 @@
         };
     }; 
 </script>
-<!-- <div class="flex flex-col items-center justify-center">
-</div> -->
 <GradientButton color="pinkToOrange" size='sm' outline on:click={() => (createStageModal = true)}>Add stage</GradientButton>
 
 <Modal bind:open={createStageModal} size="lg" autoclose={false} class="w-full h-2/3">

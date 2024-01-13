@@ -58,7 +58,8 @@ export const actions = {
 			console.log(err)
 			throw error(err.status, err.message)
 		}
-	
+		
+		console.log('success...')
 		return {
 			success :true
 		}
