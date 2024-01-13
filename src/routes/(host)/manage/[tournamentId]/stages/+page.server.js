@@ -3,7 +3,25 @@ import { serializeNonPOJOs, formBody } from '$lib/utils';
 import { BracketsManager } from 'brackets-manager';
 import { InMemoryDatabase } from 'brackets-memory-db';
 
- export const actions = {
+export async function load({locals, params}) {
+	try { 
+		const participants = serializeNonPOJOs(await locals.pb.collection('participants').getFullList({
+			filter: `tournament = "${params.tournamentId}"`
+		})) 
+        const stages = serializeNonPOJOs(await locals.pb.collection('stages').getFullList({
+			filter: `tournament = "${params.tournamentId}"`
+		}))  
+		console.log('stages loads trigred')
+        return {
+			stages,
+			participants
+		}
+    } catch (err) { 
+        throw error(err.status, err.message)
+    }  
+}
+
+export const actions = {
     createStage : async ({ locals, request, params}) => {
 		try {
 			 
@@ -35,15 +53,15 @@ import { InMemoryDatabase } from 'brackets-memory-db';
 				tournament: params.tournamentId
 			}
 			// insert to DB 
-			await locals.pb.collection('stages').create(newStage) 
-			return {
-				success: true
-			}
+			await locals.pb.collection('stages').create(newStage)  
 		} catch (err) {
 			console.log(err)
 			throw error(err.status, err.message)
 		}
-
+	
+		return {
+			success :true
+		}
 		
 	}
  };

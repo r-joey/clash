@@ -1,10 +1,11 @@
 <script>
     import { GradientButton, Modal, Label, Input, Checkbox, Select, Button, MultiSelect, NumberInput, ListgroupItem, Avatar, ButtonGroup, InputAddon, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell, Textarea } from 'flowbite-svelte'
-    export let tournament 
-
-    let participants = tournament?.expand?.['participants(tournament)'] ?? []
+    export let participants 
+    import { enhance, applyAction } from '$app/forms';
+    
+    import toast from 'svelte-french-toast';
     let createStageModal = false  
- 
+    let loading = false
     let tournamentParticipants = participants ? participants.map((participant)=>({ value: participant.id, name: participant.name})) : null
     
     let stageSeeding = []
@@ -74,39 +75,24 @@
       groupCount: null,
       seedOrdering: []
     }
-    const createStage = async () => {
-
-        let config = {
-            tournamentId: 0,
-            name: stageName,
-            type: stageType,
-            seeding: stageSeeding,
-            settings: {
-                matchesChildCount: seriesType
-            }
-        } 
-        switch (stageType){
-            case 'single_elimination': 
-                se_settings.seedOrdering = [se_settings.seedOrdering];
-                config.settings = {...config.settings, ...se_settings}; 
-                break;
-            case 'double_elimination':
-                config.settings = {...config.settings, ...de_settings};
-                break;
-            case 'round_robin':
-                rr_settings.seedOrdering = [rr_settings.seedOrdering];
-                config.settings = {...config.settings, ...rr_settings};  
-                break;
-        }
-        console.log(config)
-        const response = await fetch('manage/stage', {
-            method: 'POST',
-            body: JSON.stringify(config),
-            headers: {
-                'content-type': 'application/json'
-            }
-            } )
-        }
+    const handleCreateStage = () => {
+        loading = true;
+        return async ({ result, update }) => {   
+            switch (result.type) { 
+                case 'success':   
+                    await update();  
+                    toast.success("Stage successfully created.");  
+                    break; 
+                case 'error': 
+                    toast.error(result.error.message); 
+                    break;
+                default:
+                    break;
+            }  
+        loading = false; 
+        createStageModal = false
+        };
+    }; 
 </script>
 <!-- <div class="flex flex-col items-center justify-center">
 </div> -->
@@ -114,7 +100,7 @@
 
 <Modal bind:open={createStageModal} size="lg" autoclose={false} class="w-full h-2/3">
     <!-- <form class="flex flex-col space-y-6" on:submit={createStage}> -->
-    <form class="flex flex-col space-y-6" action="?/createStage" method="POST" enctype="multipart/form-data">
+    <form class="flex flex-col space-y-6" action="?/createStage" method="POST" use:enhance={handleCreateStage} >
       <h3 class="text-xl font-medium text-gray-900 dark:text-white">Create a stage</h3>
       
       <Label class="space-y-2">
