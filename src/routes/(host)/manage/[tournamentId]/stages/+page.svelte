@@ -6,16 +6,18 @@
     export let data 
     import { BracketsManager, helpers } from 'brackets-manager';
     import { ChevronDownSolid } from 'flowbite-svelte-icons';
-    
+    import { PUBLIC_TINY_MCE_API_KEY } from '$env/static/public'
+    import Editor from '@tinymce/tinymce-svelte';  
+    const { participants } = data
  
     let active_stage = null
-
     let matchModal = false
     let selectedmatch = null
     let selectedBracket = null
     let opp1 = null
     let opp2 = null
     let winner = null
+    let additional_information = ''
 
     onMount(() => {
       if (data?.stages && data?.stages.length > 0) {
@@ -43,14 +45,21 @@
       console.log(match) 
       selectedmatch = match 
       bracketsManager.import(selectedBracket)
-      const stageData = await bracketsManager.get.tournamentData(0) 
-      console.log(stageData)
+      const stageData = await bracketsManager.get.tournamentData(0)  
       
       opp1 = match.opponent1.id ? await helpers.findParticipant(stageData.participant, match.opponent1) : {id: 0, name: 'TBD'} 
-      opp2 = match.opponent1.id ? await helpers.findParticipant(stageData.participant, match.opponent2) : {id: 0, name: 'TBD'} 
+      opp2 = match.opponent2.id ? await helpers.findParticipant(stageData.participant, match.opponent2) : {id: 0, name: 'TBD'} 
       
       matchModal = true
     } 
+
+    const handleUpdateMatch = (event) => {
+    
+      const formData = new FormData(event.target); 
+      formData.append('winner', winner)
+      const formObject = Object.fromEntries(formData.entries()) 
+      console.log(formObject) 
+    }
     
 </script>
 
@@ -64,26 +73,74 @@
     <DropdownItem>Reset</DropdownItem> 
   </Dropdown> 
   {/each}
-  <StagesModal participants={data?.participants} />
+  <StagesModal {participants}  />
 </div>
 
 <div class="brackets-viewer mt-2 rounded-md"></div>
  
-<Modal title="Update Match" bind:open={matchModal}>
-  <div class="flex justify-center items-center gap-3">
-    <h3 class="text-orange-500 text-3xl font-bold">{opp1.name}</h3>
-    <h3 class="font-bold">vs</h3>
-    <h3 class="text-orange-500 text-3xl font-bold">{opp2.name}</h3>
-  </div>
- 
-  <Tabs >
+<Modal size='md' title="Update Match" bind:open={matchModal}>  
+  <Tabs style="pill" >
     {#each selectedmatch?.metadata?.games ?? [] as game, index} 
       <TabItem open={index === 0 ? true : false} title={`Game ${game.number}`}>
-        <p class="text-sm text-gray-500 dark:text-gray-400">
-          <b>{game.opponent1.id}</b>
-          <b>{game.opponent2.id}</b>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-        </p>
+        <form on:submit|preventDefault={handleUpdateMatch} class="space-y-2">
+          <input value={game.id} type="text" hidden name="game_id">
+          <div class="grid grid-cols-7 "> 
+            <div class="col-span-3 flex text-white  font-bold items-center justify-center">
+              {opp1.name}
+            </div> 
+            <div class="col-span-1 flex  items-center justify-center">
+              vs
+            </div>
+            <div class="col-span-3 flex  text-white font-bold items-center justify-center">
+              {opp2.name}
+            </div>
+            <div class="col-span-3"> 
+              <ButtonGroup class="w-full">
+                <NumberInput name="opp1"></NumberInput> 
+                <InputAddon><Radio bind:group={winner} value='opp1'>win</Radio></InputAddon>
+              </ButtonGroup>
+            </div> 
+            <div class="col-span-1 flex  items-center justify-center">    
+              <div>
+                <Button><ChevronDownSolid class="w-3 h-3 text-white dark:text-white" /></Button>
+                <Dropdown>
+                  <DropdownItem>Reset Winner</DropdownItem>
+                  <DropdownItem>Reset Score</DropdownItem>
+                  <DropdownItem>Reset Game</DropdownItem> 
+                </Dropdown>
+              </div>
+            </div> 
+            <div class="col-span-3"> 
+              <ButtonGroup class="w-full">
+                <InputAddon><Radio bind:group={winner} value='opp2'>win</Radio></InputAddon>   
+                <NumberInput name="opp2"></NumberInput> 
+              </ButtonGroup>
+            </div> 
+          </div>
+          <div>
+            <Label>Video URL</Label>
+            <Input name="video_url"></Input>
+          </div>
+          <div>  
+            <Label>Additional match information</Label>
+            <textarea hidden name='additional_information' bind:value={additional_information}></textarea>
+            <Editor  
+            apiKey={PUBLIC_TINY_MCE_API_KEY}
+            bind:value={additional_information}
+            conf={
+                {
+                plugins: 'lists link ',
+                toolbar: "undo redo | styles | bold italic underline strikethrough | align | bullist numlist | link ",
+                menubar: false,
+                skin: 'oxide-dark',
+                content_css: 'dark'
+                }
+              }
+            />  
+
+          </div> 
+          <Button type="submit" class="w-full">Save</Button>
+        </form>
       </TabItem> 
     {/each}  
   </Tabs> 

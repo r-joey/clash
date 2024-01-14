@@ -15,6 +15,7 @@
     let seriesType; 
      
     let series_types = [
+      { value: 1, name: 'Best-of-1'},
       { value: 3, name: 'Best-of-3'},
       { value: 5, name: 'Best-of-5'},
       { value: 7, name: 'Best-of-7'} 
@@ -97,10 +98,9 @@
 </script>
 <GradientButton color="pinkToOrange" size='sm' outline on:click={() => (createStageModal = true)}>Add stage</GradientButton>
 
-<Modal bind:open={createStageModal} size="lg" autoclose={false} class="w-full h-2/3">
-    <!-- <form class="flex flex-col space-y-6" on:submit={createStage}> -->
-    <form class="flex flex-col space-y-6" action="?/createStage" method="POST" use:enhance={handleCreateStage} >
-      <h3 class="text-xl font-medium text-gray-900 dark:text-white">Create a stage</h3>
+<Modal title="Create a stage" bind:open={createStageModal} size="md" autoclose={false} > 
+
+    <form class="flex flex-col space-y-6" action="?/createStage" method="POST" use:enhance={handleCreateStage} > 
       
       <Label class="space-y-2">
         <span>Stage Name</span>
@@ -168,7 +168,7 @@
   
   
   
-      <Button type="submit" class="w-full1">Create</Button>
+      <Button disabled={loading} type="submit" class="w-full1">Create</Button>
    
     </form>
   </Modal>

@@ -21,6 +21,7 @@
                 default:
                     break;
             }  
+        openDel = false
         loading = false;  
         };
     }; 
