@@ -10,7 +10,7 @@
 
     import { PenSolid } from 'flowbite-svelte-icons'
     import { getImageURL } from '$lib/utils'  
-    import DeleteModal from './DeleteModal.svelte';
+    import DeleteParticipantModal from './DeleteParticipantModal.svelte';
   
     let loading = false;
     let additional_information = ''
@@ -125,7 +125,7 @@
                 <TableBodyCell><a target="_blank" class="underline text-orange-300" href={participant.social ?? ''}>social</a> </TableBodyCell>
                 <TableBodyCell> 
                     <Button size="sm" on:click={()=> {teamEditMode=true; selectedTeam=participant}}><UserEditSolid size="sm"></UserEditSolid></Button>
-                    <DeleteModal {participant} />
+                    <DeleteParticipantModal {participant} />
                 </TableBodyCell> 
             </TableBodyRow>
         {/each} 
