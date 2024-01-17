@@ -11,7 +11,7 @@ export async function load({locals, params}) {
         const stages = serializeNonPOJOs(await locals.pb.collection('stages').getFullList({
 			filter: `tournament = "${params.tournamentId}"`
 		}))  
-		console.log('stages loads trigred')
+		console.log('stages loads triggered')
         return {
 			stages,
 			participants
