@@ -62,5 +62,43 @@ export const actions = {
 			success: true
 		}
 		
+	},
+	updateStage : async ({ locals, request}) => {
+		try {
+
+			const formData = formBody(await request.formData())   
+			// console.log( formData.video_url === 0 )
+			const stage = serializeNonPOJOs(await locals.pb.collection('stages').getOne(formData.stage_id)) 
+
+			const storage = new InMemoryDatabase()    
+			const manager = new BracketsManager(storage)  
+			await manager.import(stage.data);
+			const matchGameData = {
+								parent_id: formData.match_id,
+								number: formData.game_number, 
+								vid_url : formData.video_url !== 0 ? formData.video_url: '',
+								additional_information : formData.additional_information !== 0 ? formData.additional_information : '',
+								opponent1: { score: formData.opp1 },
+								opponent2: { score: formData.opp2 }
+							}
+			
+			if (formData.winner == 'opp1') {
+				matchGameData.opponent1.result = 'win';
+			} else if (formData.winner == 'opp2') {
+				matchGameData.opponent2.result = 'win';
+				}
+
+			await manager.update.matchGame(matchGameData);
+			const newData = await manager.export();
+			
+			await locals.pb.collection('stages').update(formData.stage_id, {data: newData})
+			// console.log('updating stage')
+		} catch (err) {
+			console.log(err)
+		}
+
+		return {
+			success: true
+		}
 	}
  };
