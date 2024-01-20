@@ -12,7 +12,7 @@
     ] 
 </script>  
  
-<div class="flex flex-col-1 gap-3 flex-wrap mb-3"> 
+<div class="flex flex-nowrap overflow-x-auto gap-3 items-center justify-start whitespace-nowrap mb-3"> 
   {#each navigation as navItem}
     <Button outline={$page.url.pathname === navItem.href ? false : true} href={navItem.href}>{navItem.title}</Button>
   {/each}

@@ -91,7 +91,7 @@
 </script>
 
 <!-- Navigations START -->
-<div class="flex flex-col-1 gap-3 flex-wrap mb-3"> 
+<div class="flex flex-nowrap overflow-x-auto gap-3 items-center justify-start whitespace-nowrap"> 
   {#each data?.stages as stage,idx  }
   <Button color='light' size='sm' on:click={()=>{selectedStage = stage}}>{stage.data.stage[0].name}<ChevronDownSolid class={`w-3 h-3 ms-2 text-white dark:text-white stage_actions_trigger_${stage.id}`} /></Button>
   <Dropdown triggeredBy={`.stage_actions_trigger_${stage.id}`}>
@@ -109,7 +109,7 @@
 
 
 <Modal size='md' title="Update Match" bind:open={matchModal}> 
-  <div class="flex gap-3 flex-wrap">
+  <div class="flex flex-nowrap overflow-x-auto gap-3 items-center justify-start whitespace-nowrap">
     {#each selectedMatch?.metadata?.games ?? [] as game}
       <Button outline = {selectedGame.id === game.id ? false : true} on:click={()=>gameClicked(game)} >Game {game.number}</Button>
     {/each}

@@ -34,4 +34,14 @@ export const  formBody = (body) => {
       return data;
     }, {});
   }
+
+  export const isPowerOfTwo = (n) => {
+    // Check if n is zero or negative, which are not powers of 2
+    console.log('powerof2 hit')
+    if (n <= 0) {
+      return false;
+    }
+    // Check if n and n - 1 have any common bits using bitwise AND
+    return (n & (n - 1)) === 0;
+    }
   

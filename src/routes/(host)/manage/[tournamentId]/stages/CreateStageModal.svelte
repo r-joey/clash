@@ -5,6 +5,7 @@
     import toast from 'svelte-french-toast';  ;
     import { SortableList } from '@jhubbardsf/svelte-sortablejs'; 
     import { getImageURL } from '$lib/utils'  
+    import { ChevronSortOutline } from 'flowbite-svelte-icons';
     let createStageModal = false  
     let loading = false
     let tournamentParticipants = participants ? participants.map((participant)=>({ value: participant.id, name: participant.name})) : null
@@ -79,12 +80,13 @@
     }
     const handleCreateStage = async () => {
         loading = true;
-        return async ({ result, update }) => {   
+        return async ({ result, update }) => {  
+          console.log(result) 
             switch (result.type) { 
                 case 'success':   
                     await update();  
                     toast.success("Stage successfully created.");   
-                    break; 
+                    break;  
                 case 'error': 
                     toast.error(result.error.message); 
                     break;
@@ -94,7 +96,31 @@
         loading = false; 
         createStageModal = false
         };
-    } 
+    }  
+    const handleAddSeed = (event) => {
+
+      if (event.items.length > 0) { 
+        event.items.forEach((selectedItem, index) => {
+          const item = selectedItem.querySelector('input');
+          item.setAttribute('name', 'seeding'); 
+        });
+      } else {
+        const item = event.item.querySelector('input')
+        item.setAttribute('name', 'seeding')
+      } 
+    }
+
+    const handleRemoveSeed = (event) => {
+      if (event.items.length > 0) { 
+        event.items.forEach((selectedItem, index) => {
+          const item = selectedItem.querySelector('input');
+          item.setAttribute('name', 'seeding'); 
+        });
+      } else {
+        const item = event.item.querySelector('input')
+        item.setAttribute('name', 'seeding')
+      } 
+    }
 </script>
 <GradientButton color="pinkToOrange" size='sm' outline on:click={() => (createStageModal = true)}>Add stage</GradientButton>
 
@@ -110,8 +136,7 @@
       <div class="grid grid-cols-2 gap-3">
         <div class="space-y-2">
           <Label>Seeds for this Stage</Label>
-          <SortableList class="border-orange-500 space-y-1 h-full" group='participants_seed' animation={250} multiDragClass="selected_participant" onChange={(e)=>{let names = e.items.map(item => item.name); // get the names of the items
-            console.log(names); }}>
+          <SortableList class="border-orange-500 space-y-1 h-full" group='participants_seed' animation={250} multiDragClass="selected_participant" onAdd={handleAddSeed} onRemove={handleRemoveSeed}>
           </SortableList>
         </div>
        
@@ -121,7 +146,7 @@
             {#each participants as participant, idx (participant.id) }
             <div class="hover:cursor-grab border rounded-md p-2 flex flex-col-1 content-center items-center justify-between align-middle"> 
               <div class="flex flex-col-1 content-center items-center justify-between align-middle space-x-2">
-                <input type="text" hidden value={participant.id} name="seeding">
+                <input type="text" hidden value={participant.id}>
                 <Avatar size='sm' src={participant?.profile_picture ? getImageURL(participant?.collectionId, participant?.id, participant?.profile_picture, "80x80") : `/PP.jpg`} />
                 <span class="line-clamp-1">{participant.name}</span> 
               </div> 
