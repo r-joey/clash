@@ -1,4 +1,5 @@
-import { error, redirect, invalid } from '@sveltejs/kit';
+import { error, redirect } from '@sveltejs/kit'
+import { invalid } from "@sveltejs/kit";
 import { serializeNonPOJOs, formBody, isPowerOfTwo } from '$lib/utils';
 import { BracketsManager } from 'brackets-manager';
 import { InMemoryDatabase } from 'brackets-memory-db';
@@ -34,13 +35,6 @@ export const actions = {
 
 			const participantsFromDB = tournament?.expand?.['participants(tournament)'] ?? [] 
 			const seedings = participantsFromDB.filter(item => body.seeding.includes(item.id));
-			 
-			if (!isPowerOfTwo(seedings.length)) { 
-				return invalid(400, {
-					data: undefined,
-					errorMsg: "Title must not be empty!",
-				});
-			  }
 			  
 			// manual convert into brackets-manager object 
 			const { name, seeding, type, seedOrdering, ...rest } = body; 
