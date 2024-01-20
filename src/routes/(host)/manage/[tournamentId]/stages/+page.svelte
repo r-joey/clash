@@ -21,13 +21,13 @@
     let opp2 = null 
     let winner = null 
     
-    $: if (selectedStage){  
-      renderBracket(selectedStage.data) 
-    }
+    // $: if (selectedStage){  
+    //   renderBracket(selectedStage.data) 
+    // }
 
-    $: {
-      console.log('selected_stage', selectedStage)
-      console.log(data)
+    $: if (selectedStage){
+        selectedStage = data?.stages.find(stage => stage.id === selectedStage.id); 
+        renderBracket(selectedStage.data) 
     }
     onMount(() => {
       if (data?.stages && data?.stages.length > 0) {

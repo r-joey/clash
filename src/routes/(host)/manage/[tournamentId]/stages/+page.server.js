@@ -21,6 +21,16 @@ export async function load({locals, params}) {
     }  
 }
 
+const isPowerOfTwo = (n) => {
+	// Check if n is zero or negative, which are not powers of 2
+	if (n <= 0) {
+	  return false;
+	}
+	// Check if n and n - 1 have any common bits using bitwise AND
+	return (n & (n - 1)) === 0;
+  }
+
+  
 export const actions = {
     createStage : async ({ locals, request, params}) => {
 		try {
@@ -29,9 +39,23 @@ export const actions = {
 				expand: 'participants(tournament)'
 			}))  
 			const body = formBody(await request.formData())
+			console.log(request)
+
+			return {
+				success: true
+			}
+
 			const participantsFromDB = tournament?.expand?.['participants(tournament)'] ?? [] 
 			const seedings = participantsFromDB.filter(item => body.seeding.includes(item.id));
 			
+
+			if (!isPowerOfTwo(num)) {
+				return {
+					error: true,
+					message: 'number of seeds should be power of 2 e.g. 2, 4, 8, 16'
+				}
+			  }
+			  
 			// manual convert into brackets-manager object 
 			const { name, seeding, type, seedOrdering, ...rest } = body; 
 			let config = {

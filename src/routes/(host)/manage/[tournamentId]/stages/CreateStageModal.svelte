@@ -1,10 +1,10 @@
 <script>
-    import { GradientButton, Modal, Label, Input, Checkbox, Select, Button, MultiSelect, NumberInput, ListgroupItem, Avatar, ButtonGroup, InputAddon, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell, Textarea } from 'flowbite-svelte'
     export let participants 
- 
+    import { GradientButton, Modal, Label, Input, Checkbox, Select, Button, NumberInput, MultiSelect, ListgroupItem, Avatar, ButtonGroup, InputAddon, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell, Textarea } from 'flowbite-svelte'
     import { enhance, applyAction } from '$app/forms';
-    
-    import toast from 'svelte-french-toast';
+    import toast from 'svelte-french-toast';  ;
+    import { SortableList } from '@jhubbardsf/svelte-sortablejs'; 
+    import { getImageURL } from '$lib/utils'  
     let createStageModal = false  
     let loading = false
     let tournamentParticipants = participants ? participants.map((participant)=>({ value: participant.id, name: participant.name})) : null
@@ -77,7 +77,7 @@
       groupCount: null,
       seedOrdering: []
     }
-    const handleCreateStage = () => {
+    const handleCreateStage = async () => {
         loading = true;
         return async ({ result, update }) => {   
             switch (result.type) { 
@@ -94,11 +94,11 @@
         loading = false; 
         createStageModal = false
         };
-    }; 
+    } 
 </script>
 <GradientButton color="pinkToOrange" size='sm' outline on:click={() => (createStageModal = true)}>Add stage</GradientButton>
 
-<Modal title="Create a stage" bind:open={createStageModal} size="md" autoclose={false} > 
+<Modal title="Create a stage" bind:open={createStageModal} size="lg" autoclose={false} > 
 
     <form class="flex flex-col space-y-6" action="?/createStage" method="POST" use:enhance={handleCreateStage} > 
       
@@ -106,10 +106,35 @@
         <span>Stage Name</span>
         <Input bind:value={stageName} type="text" name="name" placeholder="Elimination stage" required />
       </Label>
-      <Label class="space-y-2">
-        <span>Seeds</span>
-        <MultiSelect name="seeding" placeholder="Choose seeds" items={tournamentParticipants} bind:value={stageSeeding} required />
-      </Label>
+     
+      <div class="grid grid-cols-2 gap-3">
+        <div class="space-y-2">
+          <Label>Seeds for this Stage</Label>
+          <SortableList class="border-orange-500 space-y-1 h-full" group='participants_seed' animation={250} multiDragClass="selected_participant" onChange={(e)=>{let names = e.items.map(item => item.name); // get the names of the items
+            console.log(names); }}>
+          </SortableList>
+        </div>
+       
+        <div class="space-y-2">
+          <Label>Participants</Label>
+          <SortableList  class="border-orange-500 space-y-1 h-full" group='participants_seed' animation={250} multiDragClass="selected_participant"> 
+            {#each participants as participant, idx (participant.id) }
+            <div class="hover:cursor-grab border rounded-md p-2 flex flex-col-1 content-center items-center justify-between align-middle"> 
+              <div class="flex flex-col-1 content-center items-center justify-between align-middle space-x-2">
+                <input type="text" hidden value={participant.id} name="seeding">
+                <Avatar size='sm' src={participant?.profile_picture ? getImageURL(participant?.collectionId, participant?.id, participant?.profile_picture, "80x80") : `/PP.jpg`} />
+                <span class="line-clamp-1">{participant.name}</span> 
+              </div> 
+            </div>
+          {/each}
+          </SortableList>
+        </div> 
+      </div> 
+
+
+          <!-- <MultiSelect name="seeding" placeholder="Choose seeds" items={tournamentParticipants} bind:value={stageSeeding} required /> -->
+     
+   
       <div class="grid grid-cols-2 gap-3">
         <Label class="space-y-2">
           <span>Stage Type</span>
@@ -172,3 +197,10 @@
    
     </form>
   </Modal>
+
+
+<style> 
+	:global(.selected_participant) { 
+		border: solid rgb(255, 123, 0) 1px;
+	}
+ </style>
