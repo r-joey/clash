@@ -1,7 +1,7 @@
 <script>
     import { enhance } from '$app/forms'; 
     import toast from 'svelte-french-toast';
-    import { Input, Label, Select, Fileupload, Button, Helper  } from "flowbite-svelte"
+    import { Input, Label, Select, Fileupload, Button, Spinner  } from "flowbite-svelte"
     import { PUBLIC_TINY_MCE_API_KEY } from '$env/static/public'
     import Editor from '@tinymce/tinymce-svelte';    
     
@@ -36,11 +36,13 @@
     
     const submitCreate = () => {
         loading = true;
-        return async ({ result, update }) => { 
-            console.log(result)
+        return async ({ result, update }) => {
         switch (result.type) {  
+            case 'success':  
+                toast.success('Tournament successfully created.');  
+                break;
             case 'error':  
-                toast.error(result.error.message);  
+                toast.error("Something went wrong while creating the tournament. Please try again.");  
                 break;
             default:
                 await update();
@@ -57,28 +59,18 @@
         <div class="grid gap-4 mb-4 sm:grid-cols-2">
             <div>
                 <Label>Name</Label>
-                <Input name='name' required></Input>
-                
+                <Input disabled={loading} name='name' required></Input> 
             </div>
             <div>
                 <Label>Game</Label>
-                <Select name='game' items={gamesOpts} required></Select>
+                <Select disabled={loading} name='game' items={gamesOpts} required></Select>
             </div>  
 
-            <div class="grid gap-4 grid-cols-1 sm:grid-cols-2"> 
-                <div>
-                    <Label>Size</Label>
-                    <Select name='size' items={sizeOpts} required></Select>
-                </div>
-                <div>
-                    <Label>Participant Type</Label>
-                    <Select name='participant_type' items={participantsTypeOpts} required></Select>
-                </div>
-            </div>  
-            <div>
+         
+            <div class="sm:col-span-2">
                 <Label>Cover Image</Label>
-                <Fileupload name='cover' /> 
-            </div>
+                <Fileupload disabled={loading} name='cover'/> 
+            </div> 
             <div class="sm:col-span-2">
                 <Label>Information</Label>
                 <textarea hidden name='information' bind:value={information}></textarea>
@@ -97,7 +89,12 @@
                 />  
             </div>
             <div class="sm:col-span-2">    
-                <Button type="submit" class="w-full">Create Tournament</Button>
+                <Button disabled={loading} type="submit" class="w-full">
+                    {#if loading} 
+                        <Spinner class="me-3" size="4" color="white" /> 
+                    {/if}
+                    Create Tournament
+                </Button>
             </div>  
         </div> 
       </form>

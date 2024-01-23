@@ -1,14 +1,13 @@
 <script>
     export let participants 
-    import { GradientButton, Modal, Label, Input, Checkbox, Select, Button, NumberInput, MultiSelect, ListgroupItem, Avatar, ButtonGroup, InputAddon, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell, Textarea } from 'flowbite-svelte'
-    import { enhance, applyAction } from '$app/forms';
+    export let disabled
+    import { GradientButton, Modal, Label, Input, Checkbox, Select, Button, NumberInput, MultiSelect, Spinner, Avatar } from 'flowbite-svelte'
+    import { enhance } from '$app/forms';
     import toast from 'svelte-french-toast';  ;
     import { SortableList } from '@jhubbardsf/svelte-sortablejs'; 
-    import { getImageURL } from '$lib/utils'  
-    import { ChevronSortOutline } from 'flowbite-svelte-icons';
+    import { getImageURL } from '$lib/utils'   
     let createStageModal = false  
-    let loading = false
-    let tournamentParticipants = participants ? participants.map((participant)=>({ value: participant.id, name: participant.name})) : null
+    let loading = false 
     
     let stageSeeding = []
     let stageName;
@@ -80,21 +79,20 @@
     }
     const handleCreateStage = async () => {
         loading = true;
-        return async ({ result, update }) => {  
-          console.log(result) 
+        return async ({ result, update }) => {    
             switch (result.type) { 
                 case 'success':   
                     await update();  
                     toast.success("Stage successfully created.");   
                     break;  
                 case 'error': 
-                    toast.error(result.error.message); 
+                    toast.error(`${result?.error?.message ?? "Something went wrong while creating the stage. Please try again."}`); 
                     break;
                 default:
                     break;
             }  
-        loading = false; 
         createStageModal = false
+        loading = false; 
         };
     }  
     const handleAddSeed = (event) => {
@@ -122,7 +120,7 @@
       } 
     }
 </script>
-<GradientButton color="pinkToOrange" size='sm' outline on:click={() => (createStageModal = true)}>Add stage</GradientButton>
+<GradientButton disabled={disabled} color="pinkToOrange" size='sm' outline on:click={() => (createStageModal = true)}>Add stage</GradientButton>
 
 <Modal title="Create a stage" bind:open={createStageModal} size="lg" autoclose={false} > 
 
@@ -130,7 +128,7 @@
       
       <Label class="space-y-2">
         <span>Stage Name</span>
-        <Input bind:value={stageName} type="text" name="name" placeholder="Elimination stage" required />
+        <Input disabled={loading} bind:value={stageName} type="text" name="name" placeholder="Elimination stage" required />
       </Label>
      
       <div class="grid grid-cols-2 gap-3">
@@ -163,12 +161,12 @@
       <div class="grid grid-cols-2 gap-3">
         <Label class="space-y-2">
           <span>Stage Type</span>
-          <Select name="type" placeholder="Choose stage type" items={stage_types} bind:value={stageType} required />
+          <Select disabled={loading} name="type" placeholder="Choose stage type" items={stage_types} bind:value={stageType} required />
         </Label>
   
         <Label class="space-y-2">
           <span>Series</span>
-          <Select name="matchesChildCount" placeholder="Choose a series type" items={series_types} bind:value={seriesType} required />
+          <Select disabled={loading} name="matchesChildCount" placeholder="Choose a series type" items={series_types} bind:value={seriesType} required />
         </Label>
       </div>
       
@@ -177,48 +175,53 @@
       {#if stageType === 'single_elimination'}
       <Label class="space-y-2">
         <span>Seeding Type</span>
-        <Select name="seedOrdering" placeholder="Choose seeding type" items={se_seeding_types} bind:value={se_settings['seedOrdering']} required />
+        <Select disabled={loading} name="seedOrdering" placeholder="Choose seeding type" items={se_seeding_types} bind:value={se_settings['seedOrdering']} required />
       </Label>
       <div> 
-        <Checkbox name="consolationFinal" bind:checked={se_settings['consolationFinal']}>Consolation Final</Checkbox> 
+        <Checkbox disabled={loading} name="consolationFinal" bind:checked={se_settings['consolationFinal']}>Consolation Final</Checkbox> 
       </div>
       {/if}
   
       {#if stageType === 'double_elimination'}
       <Label class="space-y-2">
         <span>Seeding Type</span>
-        <MultiSelect name="seedOrdering" placeholder="Choose seeding type" items={de_seeding_types} bind:value={de_settings['seedOrdering']} required />
+        <MultiSelect disabled={loading} name="seedOrdering" placeholder="Choose seeding type" items={de_seeding_types} bind:value={de_settings['seedOrdering']} required />
       </Label> 
       <Label class="space-y-2">
         <span>Grand Final Type</span>
-        <Select name="grandFinal" placeholder="Choose seeding type" items={de_grand_final_types} bind:value={de_settings['grandFinal']} required />
+        <Select disabled={loading} name="grandFinal" placeholder="Choose seeding type" items={de_grand_final_types} bind:value={de_settings['grandFinal']} required />
       </Label>  
       <div> 
-        <Checkbox name="consolationFinal" bind:checked={de_settings['consolationFinal']}>Consolation Final</Checkbox> 
+        <Checkbox disabled={loading} name="consolationFinal" bind:checked={de_settings['consolationFinal']}>Consolation Final</Checkbox> 
       </div>
       <div> 
-        <Checkbox name="skipFirstRound" bind:checked={de_settings['skipFirstRound']}>Skip first round</Checkbox> 
+        <Checkbox disabled={loading} name="skipFirstRound" bind:checked={de_settings['skipFirstRound']}>Skip first round</Checkbox> 
       </div>
       {/if}
   
       {#if stageType === 'round_robin'}
       <Label class="space-y-2">
         <span>Seeding Type</span>
-        <Select name="seedOrdering" placeholder="Choose seeding type" items={rr_seeding_types} bind:value={rr_settings['seedOrdering']} required />
+        <Select disabled={loading} name="seedOrdering" placeholder="Choose seeding type" items={rr_seeding_types} bind:value={rr_settings['seedOrdering']} required />
       </Label>
       <Label class="space-y-2">
         <span>Mode</span>
-        <Select name="roundRobinMode" placeholder="Choose Mode" items={rr_mode_types} bind:value={rr_settings['roundRobinMode']} required />
+        <Select disabled={loading} name="roundRobinMode" placeholder="Choose Mode" items={rr_mode_types} bind:value={rr_settings['roundRobinMode']} required />
       </Label> 
       <Label class="space-y-2">
         <span>Group Count</span>
-        <NumberInput name="groupCount" placeholder="Enter number of Groups" bind:value={rr_settings['groupCount']} required />
+        <NumberInput disabled={loading} name="groupCount" placeholder="Enter number of Groups" bind:value={rr_settings['groupCount']} required />
       </Label> 
       {/if}
   
   
   
-      <Button disabled={loading} type="submit" class="w-full1">Create</Button>
+      <Button disabled={loading} type="submit" class="w-full1">
+        {#if loading} 
+          <Spinner class="me-3" size="4" color="white" /> 
+        {/if}
+        Create
+      </Button>
    
     </form>
   </Modal>

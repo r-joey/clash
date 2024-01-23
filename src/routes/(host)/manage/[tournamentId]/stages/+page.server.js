@@ -1,9 +1,7 @@
-import { error, redirect } from '@sveltejs/kit'
-import { invalid } from "@sveltejs/kit";
+import { error, redirect } from '@sveltejs/kit' 
 import { serializeNonPOJOs, formBody, isPowerOfTwo } from '$lib/utils';
 import { BracketsManager } from 'brackets-manager';
-import { InMemoryDatabase } from 'brackets-memory-db';
-import { CodeSolid } from 'flowbite-svelte-icons';
+import { InMemoryDatabase } from 'brackets-memory-db'; 
 
 export async function load({locals, params}) {
 	try { 
@@ -12,8 +10,7 @@ export async function load({locals, params}) {
 		})) 
         const stages = serializeNonPOJOs(await locals.pb.collection('stages').getFullList({
 			filter: `tournament = "${params.tournamentId}"`
-		}))  
-		console.log('stages loads triggered')
+		}))   
         return {
 			stages,
 			participants
@@ -26,13 +23,18 @@ export async function load({locals, params}) {
  
 export const actions = {
     createStage : async ({ locals, request, params}) => {
+		const body = formBody(await request.formData()) 
+		if (!isPowerOfTwo(body.seeding.length)){
+			console.log('is not power of 2, throwing error error')
+			throw error(403, {
+				message: 'Number of seeds must be a power of two. e.g. (2, 4, 8 ...)'
+			})
+		}
 		try {
 			 
 			const tournament = serializeNonPOJOs(await locals.pb.collection('tournaments').getOne(params.tournamentId, {
 				expand: 'participants(tournament)'
 			}))  
-			const body = formBody(await request.formData()) 
-
 			const participantsFromDB = tournament?.expand?.['participants(tournament)'] ?? [] 
 			const seedings = participantsFromDB.filter(item => body.seeding.includes(item.id));
 			  
@@ -61,7 +63,7 @@ export const actions = {
 			await locals.pb.collection('stages').create(newStage)  
 		} catch (err) {
 			console.log(err)
-			throw error(err.status, err.message)
+			throw error(403)
 		}
         return {
 			success: true
@@ -100,6 +102,7 @@ export const actions = {
 			// console.log('updating stage')
 		} catch (err) {
 			console.log(err)
+			throw error(403)
 		}
 
 		return {

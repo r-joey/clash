@@ -5,13 +5,13 @@
     import { getImageURL } from '$lib/utils' 
     import { enhance, applyAction } from '$app/forms'; 
     import toast from 'svelte-french-toast';
-    import { Input, Label, Select, Button, Helper} from 'flowbite-svelte'
+    import { Input, Label, Select, Button, Spinner} from 'flowbite-svelte'
     import { PenSolid } from 'flowbite-svelte-icons'
     import { PUBLIC_TINY_MCE_API_KEY } from '$env/static/public'
     import Editor from '@tinymce/tinymce-svelte';     
     let information = tournament.information ?? ''
     let loading = false
-
+    let disabled = data?.tournament?.status === 'Finalized' ? true : false 
     let gamesOpts = [
       { value: 'mobile_legends', name: 'Mobile Legends' },
       { value: 'basketball', name: 'Basketball' },
@@ -54,7 +54,7 @@
                 toast.success("Tournament details successfully updated."); 
                 break; 
             case 'error': 
-                toast.error(result.error.message); 
+                toast.error("Something went wrong while updating the tournament. Please try again."); 
                 break;
             default:
                 break;
@@ -74,35 +74,27 @@
               <PenSolid size="lg"/> 
           </span>  
       </label>
-      <input on:change={showPreview} type="file" id="cover" name="cover" hidden >
+      <input disabled={disabled} on:change={showPreview} type="file" id="cover" name="cover" hidden >
   </div>
   <!-- COVER END -->
   <!-- DETAIL START -->
   <div class="mt-4 grid gap-4 mb-4 sm:grid-cols-2">
     <div>
         <Label>Name</Label>
-        <Input type="text" value={tournament.name ?? ''} name='name' required></Input>
+        <Input disabled={loading || disabled} type="text" value={tournament.name ?? ''} name='name' required></Input>
         
     </div>
     <div>
         <Label>Game</Label>
-        <Select name='game' items={gamesOpts} value={tournament.game ?? null} required></Select>
-    </div>  
-    <div>
-        <Label>Size</Label>
-        <Select name='size' items={sizeOpts} value={tournament.size ?? null}  required></Select>
-    </div>
- 
-    <div>
-        <Label>Participant Type</Label>
-        <Select name='participant_type' value={tournament.participant_type ?? null}  items={participantsTypeOpts} required></Select>
-    </div> 
+        <Select disabled={loading || disabled} name='game' items={gamesOpts} value={tournament.game ?? null} required></Select>
+    </div>   
     <div class="sm:col-span-2">
         <Label>Information</Label>
         <textarea hidden name='information' bind:value={information}></textarea>
         <Editor  
         apiKey={PUBLIC_TINY_MCE_API_KEY}
         bind:value={information}
+        disabled={disabled}
         conf={
             {
             plugins: 'lists link ',
@@ -115,7 +107,12 @@
         />  
     </div>
     <div class="sm:col-span-2">    
-        <Button disabled={loading} type="submit" class="w-full">Update Details</Button>
+        <Button disabled={loading || disabled} type="submit" class="w-full">
+            {#if loading} 
+                <Spinner class="me-3" size="4" color="white" /> 
+            {/if} 
+            Update Details
+        </Button>
     </div>  
 </div> 
 

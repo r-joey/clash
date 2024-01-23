@@ -1,22 +1,21 @@
 <script>
     export let data  
-    import { enhance, applyAction } from '$app/forms';
+    import { enhance } from '$app/forms';
     import toast from 'svelte-french-toast';
-    import { DotsHorizontalOutline, DotsVerticalOutline, ExclamationCircleOutline, UsersSolid, TrashBinSolid, UserEditSolid, EditOutline} from 'flowbite-svelte-icons'
+    import { UserEditSolid } from 'flowbite-svelte-icons'
     import { PUBLIC_TINY_MCE_API_KEY } from '$env/static/public'
     import Editor from '@tinymce/tinymce-svelte';    
-    import { Avatar, Modal, Label, Input, Checkbox, Select, Button, Hr, Helper, Listgroup, ListgroupItem, ButtonGroup, InputAddon, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell, Textarea, GradientButton } from 'flowbite-svelte'
-    import { Toast } from 'flowbite-svelte'; 
+    import { Avatar, Modal, Label, Input, Button, Hr, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell, Spinner, GradientButton } from 'flowbite-svelte'
 
     import { PenSolid } from 'flowbite-svelte-icons'
     import { getImageURL } from '$lib/utils'  
     import DeleteParticipantModal from './DeleteParticipantModal.svelte';
+    import EditParticipantModal from './EditParticipantModal.svelte';
   
     let loading = false;
     let additional_information = ''
 
-    let teamEditMode = false
-    let selectedTeam = null     
+    let disabled = data?.tournament?.status === 'In progress' || data?.tournament?.status === 'Finalized' ? true : false
     let addParticipantModal = false
    
 
@@ -35,27 +34,31 @@
     const handleCreateParticipant = () => {
         loading = true;
         return async ({ result, update }) => {   
+            console.log(result)
             switch (result.type) { 
                 case 'success':   
                     await update();  
                     toast.success("Participant successfully added."); 
                     additional_information = ''
                     break; 
-                case 'error': 
-                    toast.error(result.error.message); 
+                case 'error':  
+                    toast.error(`${result?.error?.message ?? "Something went wrong while adding the participant. Please try again."}`); 
                     break;
                 default:
                     break;
             }  
-        loading = false; 
         addParticipantModal = false
+        loading = false; 
         };
     }; 
 </script>
 
-<div class="flex flex-col-1 gap-3 flex-wrap mb-3">
-    <GradientButton size="sm" color="pinkToOrange" outline on:click={()=> addParticipantModal = true}>Add participant</GradientButton>
+<div class="flex flex-col-1 gap-3 flex-wrap items-center justify-center">
+    <GradientButton disabled={disabled} size="sm" color="pinkToOrange" outline on:click={()=> addParticipantModal = true}>Add participant</GradientButton>
 </div>
+ 
+
+
 
 <Modal title="Add new participant" bind:open={addParticipantModal} size="md" autoclose={false}>
     <form class="space-y-2 mb-4" action="?/createParticipant" method="POST" enctype="multipart/form-data" use:enhance={handleCreateParticipant}>
@@ -76,12 +79,12 @@
         <div class="mt-4 grid gap-4 mb-4 sm:grid-cols-2">
             <div>
                 <Label>Name</Label>
-                <Input type="text" name='name' required></Input>
+                <Input disabled={loading} type="text" name='name' required></Input>
                 
             </div>
             <div>
                 <Label>Social</Label>
-                <Input type="text" name='social' required></Input>
+                <Input disabled={loading} type="text" name='social'></Input>
             </div> 
             <div class="sm:col-span-2">
                 <Label>Additional Information</Label>
@@ -102,7 +105,12 @@
             </div>
         </div>
         <div class="sm:col-span-2">    
-            <Button disabled={loading} type="submit" class="w-full">Save</Button>
+            <Button disabled={loading} type="submit" class="w-full">
+                {#if loading} 
+                    <Spinner class="me-3" size="4" color="white" /> 
+                {/if} 
+                Save
+            </Button>
         </div>  
     </form>
 </Modal> 
@@ -124,8 +132,8 @@
                 <TableBodyCell>{participant.name}</TableBodyCell>
                 <TableBodyCell><a target="_blank" class="underline text-orange-300" href={participant.social ?? ''}>social</a> </TableBodyCell>
                 <TableBodyCell> 
-                    <Button size="sm" on:click={()=> {teamEditMode=true; selectedTeam=participant}}><UserEditSolid size="sm"></UserEditSolid></Button>
-                    <DeleteParticipantModal {participant} />
+                    <EditParticipantModal {disabled} {participant} />
+                    <DeleteParticipantModal {disabled} {participant} />
                 </TableBodyCell> 
             </TableBodyRow>
         {/each} 

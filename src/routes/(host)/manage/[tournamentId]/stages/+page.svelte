@@ -1,15 +1,13 @@
 <script>
     export let data 
-    import { enhance, applyAction } from '$app/forms';
+    import { enhance } from '$app/forms';
     import toast from 'svelte-french-toast';
-    import { afterUpdate, onMount } from "svelte";
+    import { onMount } from "svelte";
     import CreateStageModal from "./CreateStageModal.svelte"; 
     import { getImageURL } from '$lib/utils';
-    import { Dropdown, DropdownItem, DropdownDivider, DropdownHeader, Radio, Tabs,TabItem, Modal, NumberInput, Label, Input, Checkbox, Select, Button, MultiSelect, ListgroupItem, Avatar, ButtonGroup, InputAddon, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell, Textarea } from 'flowbite-svelte'
-    import { BracketsManager, helpers } from 'brackets-manager';
+    import { Dropdown, DropdownItem, Spinner, Radio, Modal, NumberInput, Label, Input, Button, Avatar, ButtonGroup, InputAddon, Textarea } from 'flowbite-svelte'
+    import {  helpers } from 'brackets-manager';
     import { ChevronDownSolid } from 'flowbite-svelte-icons';
-    import { PUBLIC_TINY_MCE_API_KEY } from '$env/static/public'
-    import Editor from '@tinymce/tinymce-svelte';   
     
     let selectedStage = null
     let selectedMatch = null
@@ -20,11 +18,8 @@
     let opp1 = null
     let opp2 = null 
     let winner = null 
-    
-    // $: if (selectedStage){  
-    //   renderBracket(selectedStage.data) 
-    // }
-
+     
+    let disabled = data?.tournament?.status !== 'In progress' ? true : false
     $: if (selectedStage){
         selectedStage = data?.stages.find(stage => stage.id === selectedStage.id); 
         renderBracket(selectedStage.data) 
@@ -75,16 +70,16 @@
                 case 'success':   
                     await update();  
                     renderBracket(selectedStage.data) 
-                    toast.success("Stage successfully updated."); 
+                    toast.success("Match successfully updated."); 
                     break; 
                 case 'error': 
-                    toast.error(result.error.message); 
+                    toast.error("Something went wrong while creating the tournament. Please try again."); 
                     break;
                 default:
                     break;
             }  
-        loading = false; 
         matchModal = false
+        loading = false; 
         };
     }; 
     
@@ -99,7 +94,7 @@
     <DropdownItem>Reset</DropdownItem> 
   </Dropdown> 
   {/each}
-  <CreateStageModal participants={data.participants}  /> 
+  <CreateStageModal {disabled} participants={data.participants}  /> 
 </div>
 <!-- Navigations END -->
 
@@ -119,7 +114,7 @@
         <input value={selectedMatch.id} type="text" hidden name="match_id">
         <input value={selectedGame.number} type="text" hidden name="game_number">
         <div class="grid grid-cols-7 "> 
-          
+           
           <div class="col-span-3 mb-3">
             <div class="flex items-center justify-center" > 
               <Avatar size="lg" src={opp1?.profile_picture ? getImageURL(opp1?.collectionId, opp1?.id, opp1?.profile_picture, "80x80") : `/PP.jpg`} />
@@ -140,8 +135,8 @@
 
           <div class="col-span-3"> 
             <ButtonGroup class="w-full">
-              <NumberInput value={selectedGame.opponent1.score ?? ''} name="opp1"></NumberInput> 
-              <InputAddon><Radio name='winner' bind:group={winner} value='opp1'>win</Radio></InputAddon>
+              <NumberInput disabled={loading} value={selectedGame.opponent1.score ?? ''} name="opp1"></NumberInput> 
+              <InputAddon><Radio disabled={loading} name='winner' bind:group={winner} value='opp1'>win</Radio></InputAddon>
             </ButtonGroup>
           </div> 
           <div class="col-span-1 flex  items-center justify-center">    
@@ -149,19 +144,24 @@
           </div> 
           <div class="col-span-3"> 
             <ButtonGroup class="w-full">
-              <InputAddon><Radio name='winner' bind:group={winner} value='opp2'>win</Radio></InputAddon>   
-              <NumberInput value={selectedGame.opponent2.score ?? ''} name="opp2"></NumberInput> 
+              <InputAddon><Radio disabled={loading} name='winner' bind:group={winner} value='opp2'>win</Radio></InputAddon>   
+              <NumberInput disabled={loading} value={selectedGame.opponent2.score ?? ''} name="opp2"></NumberInput> 
             </ButtonGroup>
           </div> 
         </div>
         <div>
           <Label>Video URL</Label>
-          <Input value={selectedGame.vid_url ?? ''} name="video_url"></Input>
+          <Input disabled={loading} value={selectedGame.vid_url ?? ''} name="video_url"></Input>
         </div>
         <div>  
           <Label for="additional_information-id">Additional match information</Label>
-          <Textarea id="additional_information-id" value={selectedGame.additional_information ?? ''} rows="5" name="additional_information" />
+          <Textarea disabled={loading} id="additional_information-id" value={selectedGame.additional_information ?? ''} rows="5" name="additional_information" />
         </div> 
-        <Button type="submit" class="w-full">Save</Button>
+        <Button disabled={loading} type="submit" class="w-full">
+          {#if loading} 
+            <Spinner class="me-3" size="4" color="white" /> 
+          {/if}
+          Save
+        </Button>
       </form> 
 </Modal>

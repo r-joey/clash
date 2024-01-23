@@ -9,6 +9,7 @@
         {title: 'Participants', href: `/manage/${tournament.id}/participants`},
         {title: 'Stages', href: `/manage/${tournament.id}/stages`},
         {title: 'Settings', href: `/manage/${tournament.id}/settings`},
+        {title: 'Awards', href: `/manage/${tournament.id}/settings`},
     ] 
 </script>  
  

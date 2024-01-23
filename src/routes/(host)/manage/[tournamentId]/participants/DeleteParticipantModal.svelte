@@ -1,9 +1,10 @@
 <script>
-    import { DotsHorizontalOutline, DotsVerticalOutline, ExclamationCircleOutline, UsersSolid, TrashBinSolid, UserEditSolid, EditOutline} from 'flowbite-svelte-icons'
-    import {  Modal, Label, Input, Checkbox, Select, Button, Hr, Helper, Listgroup, ListgroupItem, Avatar, ButtonGroup, InputAddon, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell, Textarea, GradientButton } from 'flowbite-svelte'
+    export let participant
+    export let disabled
+    import { ExclamationCircleOutline, TrashBinSolid } from 'flowbite-svelte-icons'
+    import {  Modal, Spinner, Button } from 'flowbite-svelte'
     import { enhance, applyAction } from '$app/forms';
     import toast from 'svelte-french-toast';
-    export let participant
     let openDel = false
     let loading = false
 
@@ -16,7 +17,7 @@
                     toast.success("Participant successfully deleted."); 
                     break; 
                 case 'error': 
-                    toast.error(result.error.message); 
+                    toast.error(`${result?.error?.message ?? "Something went wrong while deleting the participant. Please try again."}`); 
                     break;
                 default:
                     break;
@@ -27,7 +28,7 @@
     }; 
 </script>
 
-<Button size="sm" on:click={()=>{openDel = true}}><TrashBinSolid size="sm"></TrashBinSolid></Button>
+<Button disabled={disabled} size="sm" on:click={()=>{openDel = true}}><TrashBinSolid size="sm"></TrashBinSolid></Button>
 
 <Modal bind:open={openDel} size="xs" autoclose={false}>
     <div class="text-center">
@@ -36,7 +37,12 @@
         <p class="mb-5 text-lg font-normal"> <strong>{participant.name}</strong>?</p>
         <form action="?/deleteParticipant" method="POST" use:enhance={handleDeleteParticipant}>  
             <input type="hidden" name="id" value={participant.id}>
-            <Button type="submit" color="primary" class="me-2">Yes</Button>
+            <Button disabled={loading} type="submit" color="primary" class="me-2">
+                {#if loading} 
+                    <Spinner class="me-3" size="4" color="white" /> 
+                {/if} 
+                Yes
+            </Button>
             <Button on:click={()=>{openDel = false}} type="button" color="alternative">Cancel</Button>
         </form>
     </div>

@@ -1,8 +1,6 @@
-import { redirect } from '@sveltejs/kit' 
-import { error } from '@sveltejs/kit'
+import { redirect, error } from '@sveltejs/kit'
 export const actions = {
-    updateProfile : async ({ locals, request }) => {
-        console.log('updating profile...')
+    updateProfile : async ({ locals, request }) => { 
         let data = await request.formData()
         const userAvatar = data.get('avatar')
 

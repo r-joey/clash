@@ -1,19 +1,20 @@
 <script>
     import { enhance } from '$app/forms'; 
     import toast from 'svelte-french-toast';
-    import { Label, Input, Button } from "flowbite-svelte";
+    import { Label, Input, Button, Spinner } from "flowbite-svelte";
     export let form;
     let loading = false;
 
     const submitLogin = () => {
         loading = true;
+        console.log(loading)
         return async ({ result, update }) => { 
         switch (result.type) { 
             case 'success':
                 await update();
                 break; 
             case 'error': 
-                toast.error(result.error.message); 
+                toast.error("Incorrect email or password."); 
                 break;
             default:
                 await update();
@@ -34,17 +35,22 @@
        
         <div class="w-full max-w-md"> 
             <Label for="email" class="mb-2">Email</Label> 
-            <Input name="email"  type="email" disable={loading}  required /> 
+            <Input name="email"  type="email" disabled={loading}  required /> 
         </div> 
         <div class="w-full max-w-md"> 
             <Label for="password" class="mb-2">Password</Label> 
-            <Input name="password"  type="password" disable={loading}  required />
+            <Input name="password"  type="password" disabled={loading}  required />
         </div>  
         <div class="w-full max-w-md">
             <a href="/reset-password" class="font-medium hover:text-orange-400 hover:cursor-pointer hover:underline">Forgot password?</a>
         </div>
         <div class="w-full max-w-md pt-2"> 
-            <Button disable={loading} class="w-full" type="submit">Login</Button>
+            <Button disabled={loading} class="w-full" type="submit">
+                {#if loading} 
+                    <Spinner class="me-3" size="4" color="white" /> 
+                {/if}
+                Login
+            </Button>
         </div>
         {#if form?.notVerified}
             <div role="alert" class="alert alert-error w-full max-w-md"> 
