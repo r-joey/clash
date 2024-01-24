@@ -89,11 +89,15 @@ export const actions = {
 								opponent2: { score: formData.opp2 }
 							}
 			
-			if (formData.winner == 'opp1') {
+			if (formData?.winner == 'opp1') {
 				matchGameData.opponent1.result = 'win';
-			} else if (formData.winner == 'opp2') {
+			} else if (formData?.winner == 'opp2') {
 				matchGameData.opponent2.result = 'win';
-				}
+			} else {
+				delete matchGameData.opponent1.result
+				delete matchGameData.opponent2.result
+			}
+			// console.log(formData)
 
 			await manager.update.matchGame(matchGameData);
 			const newData = await manager.export();
@@ -108,5 +112,17 @@ export const actions = {
 		return {
 			success: true
 		}
+	},
+	deleteStage: async ({ locals, request }) => {
+		const { id } = Object.fromEntries(await request.formData()); 
+		try {
+			await locals.pb.collection('stages').delete(id);
+		} catch (err) {
+			console.log('Error: ', err);
+			throw error(err.status, err.message);
+		}
+		return {
+			success: true
+		};
 	}
  };

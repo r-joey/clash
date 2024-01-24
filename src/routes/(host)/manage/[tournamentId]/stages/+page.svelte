@@ -7,7 +7,8 @@
     import { getImageURL } from '$lib/utils';
     import { Dropdown, DropdownItem, Spinner, Radio, Modal, NumberInput, Label, Input, Button, Avatar, ButtonGroup, InputAddon, Textarea } from 'flowbite-svelte'
     import {  helpers } from 'brackets-manager';
-    import { ChevronDownSolid } from 'flowbite-svelte-icons';
+    import { ChevronDownSolid, RedoOutline } from 'flowbite-svelte-icons';
+    import DeleteStageModal from './DeleteStageModal.svelte';
     
     let selectedStage = null
     let selectedMatch = null
@@ -22,7 +23,13 @@
     let disabled = data?.tournament?.status !== 'In progress' ? true : false
     $: if (selectedStage){
         selectedStage = data?.stages.find(stage => stage.id === selectedStage.id); 
-        renderBracket(selectedStage.data) 
+        if (selectedStage){
+          renderBracket(selectedStage?.data) 
+        }else{
+          // clear render
+          const bracket_viewer = document.querySelector(".brackets-viewer");
+          bracket_viewer.innerHTML = "";
+        }
     }
     onMount(() => {
       if (data?.stages && data?.stages.length > 0) {
@@ -62,7 +69,11 @@
       // console.log(opp1.profile_picture)
       matchModal = true
     }  
-
+    const handleResetScores =() => {
+      winner = null
+      selectedGame.opponent1.score = 0;
+      selectedGame.opponent2.score = 0;
+    }
     const handleUpdateStage = () => {
         loading = true;
         return async ({ result, update }) => {   
@@ -89,9 +100,8 @@
 <div class="flex flex-nowrap overflow-x-auto gap-3 items-center justify-start whitespace-nowrap"> 
   {#each data?.stages as stage,idx  }
   <Button color='light' size='sm' on:click={()=>{selectedStage = stage}}>{stage.data.stage[0].name}<ChevronDownSolid class={`w-3 h-3 ms-2 text-white dark:text-white stage_actions_trigger_${stage.id}`} /></Button>
-  <Dropdown triggeredBy={`.stage_actions_trigger_${stage.id}`}>
-    <DropdownItem>Delete</DropdownItem>
-    <DropdownItem>Reset</DropdownItem> 
+  <Dropdown triggeredBy={`.stage_actions_trigger_${stage.id}`}> 
+    <DeleteStageModal {stage}/> 
   </Dropdown> 
   {/each}
   <CreateStageModal {disabled} participants={data.participants}  /> 
@@ -123,7 +133,7 @@
               {opp1.name} 
             </div>  
           </div> 
-          <div></div>
+          <div class="flex items-center justify-center font-bold">vs</div>
           <div class="col-span-3 mb-3">
             <div class="flex items-center justify-center" > 
               <Avatar size="lg" src={opp2?.profile_picture ? getImageURL(opp2?.collectionId, opp2?.id, opp2?.profile_picture, "80x80") : `/PP.jpg`} />
@@ -135,29 +145,29 @@
 
           <div class="col-span-3"> 
             <ButtonGroup class="w-full">
-              <NumberInput disabled={loading} value={selectedGame.opponent1.score ?? ''} name="opp1"></NumberInput> 
-              <InputAddon><Radio disabled={loading} name='winner' bind:group={winner} value='opp1'>win</Radio></InputAddon>
+              <NumberInput disabled={loading || opp1.id === 0 || opp2.id === 0} value={selectedGame.opponent1.score ?? ''} name="opp1"></NumberInput> 
+              <InputAddon><Radio disabled={loading || opp1.id === 0 || opp2.id === 0} name='winner' bind:group={winner} value='opp1'>win</Radio></InputAddon>
             </ButtonGroup>
           </div> 
           <div class="col-span-1 flex  items-center justify-center">    
-              vs 
+              <Button disabled={loading || opp1.id === 0 || opp2.id === 0} on:click={handleResetScores} size='xs'><RedoOutline size='xs'/></Button>
           </div> 
           <div class="col-span-3"> 
             <ButtonGroup class="w-full">
-              <InputAddon><Radio disabled={loading} name='winner' bind:group={winner} value='opp2'>win</Radio></InputAddon>   
-              <NumberInput disabled={loading} value={selectedGame.opponent2.score ?? ''} name="opp2"></NumberInput> 
+              <InputAddon><Radio disabled={loading || opp1.id === 0 || opp2.id === 0} name='winner' bind:group={winner} value='opp2'>win</Radio></InputAddon>   
+              <NumberInput disabled={loading || opp1.id === 0 || opp2.id === 0} value={selectedGame.opponent2.score ?? ''} name="opp2"></NumberInput> 
             </ButtonGroup>
           </div> 
         </div>
         <div>
           <Label>Video URL</Label>
-          <Input disabled={loading} value={selectedGame.vid_url ?? ''} name="video_url"></Input>
+          <Input disabled={loading || opp1.id === 0 || opp2.id === 0} value={selectedGame.vid_url ?? ''} name="video_url"></Input>
         </div>
         <div>  
           <Label for="additional_information-id">Additional match information</Label>
-          <Textarea disabled={loading} id="additional_information-id" value={selectedGame.additional_information ?? ''} rows="5" name="additional_information" />
+          <Textarea disabled={loading || opp1.id === 0 || opp2.id === 0} id="additional_information-id" value={selectedGame.additional_information ?? ''} rows="5" name="additional_information" />
         </div> 
-        <Button disabled={loading} type="submit" class="w-full">
+        <Button disabled={loading || opp1.id === 0 || opp2.id === 0} type="submit" class="w-full">
           {#if loading} 
             <Spinner class="me-3" size="4" color="white" /> 
           {/if}

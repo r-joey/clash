@@ -98,8 +98,7 @@ export async function load({locals, params}) {
 		if (tournament !== null && tournament?.status !== 'Preparation') {
 			throw error(403, {message: 'Not allowed to delete participant while the tournament is In progress or has been Finalized'})
 		}
-		const { id } = Object.fromEntries(await request.formData());
-		console.log(id)
+		const { id } = Object.fromEntries(await request.formData()); 
 		try {
 			await locals.pb.collection('participants').delete(id);
 		} catch (err) {

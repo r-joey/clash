@@ -8,8 +8,8 @@
         {title: 'Details', href: `/manage/${tournament.id}/details`},
         {title: 'Participants', href: `/manage/${tournament.id}/participants`},
         {title: 'Stages', href: `/manage/${tournament.id}/stages`},
+        // {title: 'Awards', href: `/manage/${tournament.id}/awards`},
         {title: 'Settings', href: `/manage/${tournament.id}/settings`},
-        {title: 'Awards', href: `/manage/${tournament.id}/settings`},
     ] 
 </script>  
  
