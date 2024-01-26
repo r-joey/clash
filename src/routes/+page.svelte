@@ -1,5 +1,5 @@
 <script>  
-import { GradientButton , Button, Navbar, NavBrand, NavLi, NavUl, NavHamburger, Avatar, Dropdown, DropdownItem, DropdownHeader, DropdownDivider, ImagePlaceholder, Skeleton, TextPlaceholder } from 'flowbite-svelte';
+import { Button } from 'flowbite-svelte';
 </script> 
 <section class="text-center">
     <h3 class="text-white text-3xl font-extrabold mb-2">Manange tournament your with Clash</h3>

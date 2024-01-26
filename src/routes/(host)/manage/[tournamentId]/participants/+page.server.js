@@ -1,7 +1,5 @@
-import { redirect, error, invalid } from '@sveltejs/kit';  
-import { serializeNonPOJOs } from '$lib/utils';
-import { TableRowOutline } from 'flowbite-svelte-icons';
-import { format } from 'path';
+import { error } from '@sveltejs/kit';  
+import { serializeNonPOJOs } from '$lib/utils'; 
 
 export async function load({locals, params}) {
 	try { 

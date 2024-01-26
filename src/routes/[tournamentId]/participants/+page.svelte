@@ -1,12 +1,9 @@
 <script>
     export let data;
-    import { Card, Dropdown, DropdownItem, Avatar, Button, Modal } from 'flowbite-svelte';
-    import { DotsHorizontalOutline } from 'flowbite-svelte-icons'; 
+    import { Card, Avatar, Modal } from 'flowbite-svelte';
     import { getImageURL } from '$lib/utils' 
     const { participants } = data 
- 
     let participantModal = false;
-
     let selectedParticipant = {}
 </script>
 

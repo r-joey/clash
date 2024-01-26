@@ -2,8 +2,7 @@
     export let data
     import { page } from '$app/stores';
     import { getImageURL, getGameName } from '$lib/utils' 
-    import { Heading, P, A, Button } from 'flowbite-svelte';
-    import { ChevronRightSolid } from 'flowbite-svelte-icons';
+    import { Heading, Button } from 'flowbite-svelte'; 
     const { tournament } = data 
     const { expand: { user } = {} } = tournament || {}; 
     const navigation = [

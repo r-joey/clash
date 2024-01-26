@@ -1,4 +1,4 @@
-import { redirect, error} from '@sveltejs/kit'
+import { error} from '@sveltejs/kit'
 import { serializeNonPOJOs } from "$lib/utils";
 
 

@@ -1,23 +1,23 @@
 <script>
     import { enhance, applyAction } from '$app/forms'
-	 import { Label, Input, Button } from "flowbite-svelte";
-     import toast from 'svelte-french-toast';
+    import { Label, Input, Button } from "flowbite-svelte";
+    import toast from 'svelte-french-toast';
 
 
-     let loading = false;
+    let loading = false;
 
-     const submitChangepassowrd = () => {
-        loading = true
-        return async ({ result, update }) => {
-            switch (result.type) { 
-                case 'error':
-                    toast.error('Something went wrong while updating your password. Please try again.')
-                    break
-                default:
-                    await update();
-            }
-            loading = false
+    const submitChangepassowrd = () => {
+    loading = true
+    return async ({ result, update }) => {
+        switch (result.type) { 
+            case 'error':
+                toast.error('Something went wrong while updating your password. Please try again.')
+                break
+            default:
+                await update();
         }
+        loading = false
+    }
     }
 
 </script>

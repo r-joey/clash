@@ -2,13 +2,10 @@
     export let award
     export let participants
     export let disabled = false
-    import { Modal, Label, Input, Button, Hr, Select, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell, Spinner, GradientButton } from 'flowbite-svelte'
-    import { PUBLIC_TINY_MCE_API_KEY } from '$env/static/public'
-    import Editor from '@tinymce/tinymce-svelte';    
+    import { Modal, Label, Input, Button, Select, Spinner } from 'flowbite-svelte'   
     import { PenSolid, EyeOutline } from 'flowbite-svelte-icons'
     import { enhance } from '$app/forms';
-    import toast from 'svelte-french-toast';
-    import { getImageURL } from '$lib/utils'
+    import toast from 'svelte-french-toast'; 
 
 
 

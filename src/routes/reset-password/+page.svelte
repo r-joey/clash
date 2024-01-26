@@ -2,7 +2,7 @@
     export let form 
     import { enhance } from '$app/forms'; 
     import { InfoCircleSolid } from 'flowbite-svelte-icons';
-    import { Label , Button, Input, Alert , NavLi, NavUl, NavHamburger, Avatar, Dropdown, DropdownItem, DropdownHeader, DropdownDivider, ImagePlaceholder, Skeleton, TextPlaceholder } from 'flowbite-svelte';
+    import { Button, Input, Alert } from 'flowbite-svelte';
     
     let loading
     const resetPassword = () => {

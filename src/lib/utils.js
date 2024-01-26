@@ -1,5 +1,5 @@
 import { PUBLIC_POCKETBASE_URL } from '$env/static/public'  
-import games from './games.json';
+import gamesData from './games.json';
 export const serializeNonPOJOs = (obj) => {
     return structuredClone(obj)
 }
@@ -46,7 +46,8 @@ export const isPowerOfTwo = (n) => {
     }
 
   export const getGameName = (key, defaultValue = 'Unknown game type') => { 
-    return games.hasOwnProperty(key) ? games[key] : defaultValue;
+      const games = gamesData.games;
+      const game = games.find(game => game.value === key);
+      return game ? game.name : defaultValue;
   };
-  
   

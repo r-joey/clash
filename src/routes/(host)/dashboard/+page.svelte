@@ -1,6 +1,5 @@
 <script>
-    import { TournamentItem } from "$lib/components"
-    import { Button, Dropdown, DropdownItem } from 'flowbite-svelte'
+    import { TournamentItem } from "$lib/components" 
     export let data
     const { tournaments } = data 
     const { user } = data

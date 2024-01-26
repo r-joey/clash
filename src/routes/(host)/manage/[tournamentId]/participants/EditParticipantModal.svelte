@@ -1,7 +1,7 @@
 <script>
     export let participant
     export let disabled = false
-    import { Modal, Label, Input, Button, Hr, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell, Spinner, GradientButton } from 'flowbite-svelte'
+    import { Modal, Label, Input, Button, Spinner } from 'flowbite-svelte'
     import { PUBLIC_TINY_MCE_API_KEY } from '$env/static/public'
     import Editor from '@tinymce/tinymce-svelte';    
     import { PenSolid, EyeOutline } from 'flowbite-svelte-icons'

@@ -1,4 +1,4 @@
-import { redirect, error, invalid } from '@sveltejs/kit'; 
+import { redirect, error } from '@sveltejs/kit'; 
 
  export const actions = {
     createTournament : async ({request, locals}) => {

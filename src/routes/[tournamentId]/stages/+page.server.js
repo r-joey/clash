@@ -1,5 +1,5 @@
-import { error, redirect } from '@sveltejs/kit' 
-import { serializeNonPOJOs, formBody, isPowerOfTwo } from '$lib/utils';
+import { error } from '@sveltejs/kit' 
+import { serializeNonPOJOs } from '$lib/utils';
 
 export async function load({ locals, params}) {
     try {

@@ -3,7 +3,7 @@
     export let disabled
     import { ExclamationCircleOutline, TrashBinSolid } from 'flowbite-svelte-icons'
     import {  Modal, Spinner, Button } from 'flowbite-svelte'
-    import { enhance, applyAction } from '$app/forms';
+    import { enhance } from '$app/forms';
     import toast from 'svelte-french-toast';
     let openDel = false
     let loading = false

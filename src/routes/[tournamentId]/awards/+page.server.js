@@ -1,4 +1,4 @@
-import { redirect, error, invalid } from '@sveltejs/kit';  
+import { error } from '@sveltejs/kit';  
 import { serializeNonPOJOs } from '$lib/utils';
 
 export async function load({ params, locals }) {

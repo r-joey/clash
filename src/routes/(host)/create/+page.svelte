@@ -4,34 +4,9 @@
     import { Input, Label, Select, Fileupload, Button, Spinner  } from "flowbite-svelte"
     import { PUBLIC_TINY_MCE_API_KEY } from '$env/static/public'
     import Editor from '@tinymce/tinymce-svelte';    
-    
+    import gamesData from '$lib/games.json'; 
     let information = ''
-
-    let gamesOpts = [
-      { value: 'mobile_legends', name: 'Mobile Legends' },
-      { value: 'basketball', name: 'Basketball' },
-      { value: 'baseball', name: 'Baseball' },
-      { value: 'dota', name: 'DoTA' },
-      { value: 'league_of_legends', name: 'League of Legends' },
-      { value: 'badminton', name: 'Badminton' },
-      { value: 'football', name: 'Football' }
-    ];
-
-    let sizeOpts = [
-      { value: 2, name: '2' },
-      { value: 4, name: '4' },
-      { value: 8, name: '8' },
-      { value: 16, name: '16' },
-      { value: 32, name: '32' },
-      { value: 64, name: '64' }
-    ]; 
-
-    let participantsTypeOpts = [
-      {value:'player', name:'Player'},
-      {value:'team', name:'Team'}
-    ]   
-
-
+    let { games } = gamesData  
     let loading
     
     const submitCreate = () => {
@@ -62,8 +37,8 @@
                 <Input disabled={loading} name='name' required></Input> 
             </div>
             <div>
-                <Label>Game</Label>
-                <Select disabled={loading} name='game' items={gamesOpts} required></Select>
+                <Label>Game</Label> 
+                <Select disabled={loading} name='game' items={games} required></Select>
             </div>  
 
          

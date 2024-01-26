@@ -1,24 +1,20 @@
 <script>
   import "../app.pcss"; 
-  import { page } from '$app/stores';
   import { Toaster } from 'svelte-french-toast';
   import { getImageURL } from '$lib/utils' 
-  import { GradientButton , Button, Navbar, NavBrand, NavLi, NavUl, NavHamburger, Avatar, Dropdown, DropdownItem, DropdownHeader, DropdownDivider, ImagePlaceholder, Skeleton, TextPlaceholder } from 'flowbite-svelte';
-  $: activeUrl = $page.url.pathname;
+  import { GradientButton , Button, Navbar, NavBrand, NavHamburger, Avatar, Dropdown, DropdownItem, DropdownHeader, DropdownDivider } from 'flowbite-svelte';
   export let data  
 </script> 
 <Toaster />
 <Navbar > 
   <NavBrand href="/">
-    <img src="https://flowbite-svelte.com/images/flowbite-svelte-icon-logo.svg" class="me-3 h-6 sm:h-9" alt="Flowbite Logo" />
+    <img src="/logo.png" class="me-3 h-6 sm:h-9" alt="Flowbite Logo" />
     <span class="self-center whitespace-nowrap text-xl font-semibold dark:text-white">Clash</span>
   </NavBrand>
   <div class="flex md:order-2">
     {#if data.user}
     <GradientButton  href="/create" outline  color="pinkToOrange" class="mr-3">Creat</GradientButton>
-    <Avatar border class="dark:ring-orange-500 hover:cursor-pointer" id="avatar-menu" src={data?.user?.avatar ? getImageURL(data.user?.collectionId, data.user?.id, data.user?.avatar, "100x100") : `https://ui-avatars.com/api/?name=JR?bold=true`} /> 
-    {:else}
-    <!-- <Button href="/login" size="sm">Login</Button> -->
+    <Avatar border class="dark:ring-orange-500 hover:cursor-pointer" id="avatar-menu" src={data?.user?.avatar ? getImageURL(data.user?.collectionId, data.user?.id, data.user?.avatar, "80x80") : `/PP.jpg`} /> 
     {/if}
     <NavHamburger />
   </div>

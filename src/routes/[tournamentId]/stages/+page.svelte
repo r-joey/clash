@@ -11,8 +11,7 @@
 
     let selectedMatch = null
     let selectedGame = null
- 
-    let loading = false
+  
     let opp1 = null
     let opp2 = null 
     let winner = null 
@@ -43,8 +42,7 @@
         opp1 = match.opponent1.id ? await helpers.findParticipant(stageData.participant, match.opponent1) : {id: 0, name: 'TBD'} 
         opp2 = match.opponent2.id ? await helpers.findParticipant(stageData.participant, match.opponent2) : {id: 0, name: 'TBD'} 
         selectedGame = selectedMatch.metadata.games[0]
-        winner = selectedGame?.opponent1?.result === 'win' ? 'opp1' : selectedGame?.opponent2?.result === 'win' ? 'opp2' : null
-        // console.log(opp1.profile_picture)
+        winner = selectedGame?.opponent1?.result === 'win' ? 'opp1' : selectedGame?.opponent2?.result === 'win' ? 'opp2' : null 
         matchModal = true
     }
 
@@ -70,9 +68,7 @@
     {/each} 
 </div>
 
-<div class="brackets-viewer mt-2 rounded-md"></div>
-<!-- <iframe width="1236" height="695" src="" title="(ENG) M5 World Championship | Grand Finals | ONIC vs APBR | Game 7" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe> -->
-<!-- {`https://www.youtube.com/embed/${getYouTubeID(selectedGame?.vid_url)}`} -->
+<div class="brackets-viewer mt-2 rounded-md"></div> 
 
 <Modal size='md' bind:open={matchModal} outsideclose>  
     {#if selectedGame?.vid_url}       

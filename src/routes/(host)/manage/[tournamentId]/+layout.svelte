@@ -1,7 +1,6 @@
 <script> 
-    import { Button, Dropdown, DropdownItem, Tabs, TabItem} from 'flowbite-svelte'
-    import { page } from '$app/stores';
-    // import { DotsHorizontalOutline, GearSolid } from 'flowbite-svelte-icons'
+    import { Button } from 'flowbite-svelte'
+    import { page } from '$app/stores'; 
     export let data;  
     const { tournament } = data  
     const navigation = [

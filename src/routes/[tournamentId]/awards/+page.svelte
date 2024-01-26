@@ -1,11 +1,8 @@
 <script> 
     export let data;
-    import { Card, Dropdown, DropdownItem, Avatar, Button, Modal, Listgroup, ListgroupItem  } from 'flowbite-svelte';
-    import { DotsHorizontalOutline } from 'flowbite-svelte-icons'; 
-    import { getImageURL } from '$lib/utils' 
-
-    const { awards } = data 
-    console.log(awards)
+    import { Avatar, Listgroup, ListgroupItem  } from 'flowbite-svelte';
+    import { getImageURL } from '$lib/utils'  
+    const { awards } = data  
 </script>
 <div>
     

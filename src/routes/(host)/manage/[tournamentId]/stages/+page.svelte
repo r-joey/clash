@@ -5,7 +5,7 @@
     import { onMount } from "svelte";
     import CreateStageModal from "./CreateStageModal.svelte"; 
     import { getImageURL } from '$lib/utils';
-    import { Dropdown, DropdownItem, Spinner, Radio, Modal, NumberInput, Label, Input, Button, Avatar, ButtonGroup, InputAddon, Textarea } from 'flowbite-svelte'
+    import { Dropdown, Spinner, Radio, Modal, NumberInput, Label, Input, Button, Avatar, ButtonGroup, InputAddon, Textarea } from 'flowbite-svelte'
     import {  helpers } from 'brackets-manager';
     import { ChevronDownSolid, RedoOutline } from 'flowbite-svelte-icons';
     import DeleteStageModal from './DeleteStageModal.svelte';

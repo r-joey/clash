@@ -1,11 +1,8 @@
 <script>
     export let data  
     import { enhance } from '$app/forms';
-    import toast from 'svelte-french-toast';
-    import { UserEditSolid } from 'flowbite-svelte-icons'
-    import { PUBLIC_TINY_MCE_API_KEY } from '$env/static/public'
-    import Editor from '@tinymce/tinymce-svelte';    
-    import { Avatar, Modal, Label, Input, Button, Hr, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell, Spinner, GradientButton } from 'flowbite-svelte'
+    import toast from 'svelte-french-toast';     
+    import { Modal, Label, Input, Button, Hr, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell, Spinner, GradientButton } from 'flowbite-svelte'
     import { Select } from 'flowbite-svelte'; 
     import EditAward from './EditAward.svelte';
     import DeleteAward from './DeleteAward.svelte';

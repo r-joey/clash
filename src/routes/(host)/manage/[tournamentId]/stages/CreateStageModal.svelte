@@ -8,8 +8,7 @@
     import { getImageURL } from '$lib/utils'   
     let createStageModal = false  
     let loading = false 
-    
-    let stageSeeding = []
+     
     let stageName;
     let stageType;
     let seriesType; 

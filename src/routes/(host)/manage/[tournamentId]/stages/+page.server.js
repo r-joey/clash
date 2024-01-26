@@ -1,4 +1,4 @@
-import { error, redirect } from '@sveltejs/kit' 
+import { error } from '@sveltejs/kit' 
 import { serializeNonPOJOs, formBody, isPowerOfTwo } from '$lib/utils';
 import { BracketsManager } from 'brackets-manager';
 import { InMemoryDatabase } from 'brackets-memory-db'; 

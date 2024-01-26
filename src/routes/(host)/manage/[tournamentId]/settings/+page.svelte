@@ -2,7 +2,7 @@
     export let data
     import { enhance } from '$app/forms'; 
     import toast from 'svelte-french-toast';
-    import { Heading, Span, List, Li, Select, Button, Hr, Modal, Spinner } from 'flowbite-svelte';
+    import { Heading, List, Li, Select, Button, Hr, Modal, Spinner } from 'flowbite-svelte';
     import { ExclamationCircleOutline } from 'flowbite-svelte-icons';
     let deleteTournamentModal = false;
     let loading = false;   
