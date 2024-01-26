@@ -116,7 +116,7 @@
 <Modal size='md' title="Update Match" bind:open={matchModal}> 
   <div class="flex flex-nowrap overflow-x-auto gap-3 items-center justify-start whitespace-nowrap">
     {#each selectedMatch?.metadata?.games ?? [] as game}
-      <Button outline = {selectedGame.id === game.id ? false : true} on:click={()=>gameClicked(game)} >Game {game.number}</Button>
+      <Button size="xs" outline = {selectedGame.id === game.id ? false : true} on:click={()=>gameClicked(game)} >Game {game.number}</Button>
     {/each}
   </div>  
     <form action="?/updateStage" method="POST" class="space-y-2" use:enhance={handleUpdateStage}>
@@ -127,7 +127,7 @@
            
           <div class="col-span-3 mb-3">
             <div class="flex items-center justify-center" > 
-              <Avatar size="lg" src={opp1?.profile_picture ? getImageURL(opp1?.collectionId, opp1?.id, opp1?.profile_picture, "80x80") : `/PP.jpg`} />
+              <Avatar rounded size="lg" src={opp1?.profile_picture ? getImageURL(opp1?.collectionId, opp1?.id, opp1?.profile_picture, "80x80") : `/PP.jpg`} />
             </div>
             <div class="line-clamp-1 flex text-white  font-bold items-center justify-center">  
               {opp1.name} 
@@ -136,7 +136,7 @@
           <div class="flex items-center justify-center font-bold">vs</div>
           <div class="col-span-3 mb-3">
             <div class="flex items-center justify-center" > 
-              <Avatar size="lg" src={opp2?.profile_picture ? getImageURL(opp2?.collectionId, opp2?.id, opp2?.profile_picture, "80x80") : `/PP.jpg`} />
+              <Avatar rounded size="lg" src={opp2?.profile_picture ? getImageURL(opp2?.collectionId, opp2?.id, opp2?.profile_picture, "80x80") : `/PP.jpg`} />
             </div>
             <div class="line-clamp-1 flex text-white  font-bold items-center justify-center">  
               {opp2.name} 

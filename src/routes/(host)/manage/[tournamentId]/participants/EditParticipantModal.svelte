@@ -67,14 +67,10 @@
     
     <!-- Participant Cover  END-->
     <div class="mt-4 grid gap-4 mb-4 sm:grid-cols-2">
-        <div>
+        <div class="sm:col-span-2">
             <Label>Name</Label>
             <Input disabled={loading || disabled} type="text" name='name' value={participant?.name ?? ''} required></Input>
             
-        </div>
-        <div>
-            <Label>Social</Label>
-            <Input disabled={loading || disabled} type="text" name='social' value={participant?.social ?? ''}></Input>
         </div> 
         <div class="sm:col-span-2">
             <Label>Additional Information</Label>

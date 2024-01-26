@@ -3,6 +3,7 @@
     import { Button, Dropdown, DropdownItem } from 'flowbite-svelte'
     import { DotsVerticalOutline } from 'flowbite-svelte-icons'
     export let tournament
+    export let user
 </script>
 
 <div class="rounded overflow-hidden shadow-lg bg-gray-900 text-gray-400"> 
@@ -21,23 +22,14 @@
         </div>  
     </div>
     <div class="px-6 py-4"> 
-        <a href={`/manage/${tournament.id}/details`} class="font-semibold text-lg inline-block">
-            {tournament.name}
+        <a href={`/manage/${tournament.id}/details`} class="font-semibold text-lg">
+            <p class="line-clamp-1">
+                            {tournament.name} asdasd asd asd
+            </p>
         </a>
         <p class="text-gray-500 font-bold text-sm">
-            MLBB undergroud
+            {user.name}
         </p>
-    </div>
-    <div class="px-6 py-4 flex justify-between flex-row items-center">
-        <span class="py-1 text-sm font-regular text-gray-700 mr-1 flex flex-row items-center">
-            <!-- icon goes here -->
-            <span class="ml-1">6 mins ago</span> 
-        </span>
-        <span href="#/" class="py-1 text-sm font-regular text-gray-700 mr-1 flex flex-row items-center">
-            <!-- icon goes here -->
-            <span class="ml-1">{tournament.game}</span> 
-        </span>
-            
-    </div>
+    </div> 
 </div>
   

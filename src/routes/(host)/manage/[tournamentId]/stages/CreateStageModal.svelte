@@ -145,7 +145,7 @@
             <div class="hover:cursor-grab border rounded-md p-2 flex flex-col-1 content-center items-center justify-between align-middle"> 
               <div class="flex flex-col-1 content-center items-center justify-between align-middle space-x-2">
                 <input type="text" hidden value={participant.id}>
-                <Avatar size='sm' src={participant?.profile_picture ? getImageURL(participant?.collectionId, participant?.id, participant?.profile_picture, "80x80") : `/PP.jpg`} />
+                <Avatar rounded size='sm' src={participant?.profile_picture ? getImageURL(participant?.collectionId, participant?.id, participant?.profile_picture, "80x80") : `/PP.jpg`} />
                 <span class="line-clamp-1">{participant.name}</span> 
               </div> 
             </div>

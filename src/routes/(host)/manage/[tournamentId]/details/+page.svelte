@@ -61,7 +61,7 @@
         }
         loading = false; 
         };
-    }; 
+    };  
 </script>
 <form action="?/updateTournament" method="POST" enctype="multipart/form-data" use:enhance={handleUpdateTournament}> 
     <!-- COVER START -->

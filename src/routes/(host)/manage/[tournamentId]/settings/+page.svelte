@@ -67,6 +67,7 @@
                 <Li>disable updating Tournament details;</Li>
                 <Li>disable adding, updating, and deleting participant/s;</Li> 
                 <Li>disable adding, updating, and deleting stage/s.</Li>
+                <Li>enable adding, updating, and deleting award/s.</Li>
             </List> 
  
       </div>

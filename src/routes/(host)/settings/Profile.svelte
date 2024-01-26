@@ -46,7 +46,7 @@
 			<h3 class="text-2xl font-medium dark:text-gray-400">Update Profile</h3> 
             <div>
                 <Label class="mb-2" for="avatar">Profile picture</Label> 
-                <Avatar class="mb-2" id="avatar-preview" src={user?.avatar ? getImageURL(user?.collectionId, user?.id, user?.avatar, "100x100") : `https://ui-avatars.com/api/?name=JR?bold=true`} size="xl"/>
+                <Avatar rounded class="mb-2" id="avatar-preview" src={user?.avatar ? getImageURL(user?.collectionId, user?.id, user?.avatar, "100x100") : `https://ui-avatars.com/api/?name=JR?bold=true`} size="xl"/>
                 <Fileupload on:change={showPreview} type="file" name="avatar" id="avatar" accept="image/*"  disabled={loading}/>
             </div>
             <div>

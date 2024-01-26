@@ -6,8 +6,7 @@
     let loading = false;
 
     const submitLogin = () => {
-        loading = true;
-        console.log(loading)
+        loading = true; 
         return async ({ result, update }) => { 
         switch (result.type) { 
             case 'success':

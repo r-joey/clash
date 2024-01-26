@@ -18,7 +18,7 @@
     <GradientButton  href="/create" outline  color="pinkToOrange" class="mr-3">Creat</GradientButton>
     <Avatar border class="dark:ring-orange-500 hover:cursor-pointer" id="avatar-menu" src={data?.user?.avatar ? getImageURL(data.user?.collectionId, data.user?.id, data.user?.avatar, "100x100") : `https://ui-avatars.com/api/?name=JR?bold=true`} /> 
     {:else}
-    <Button href="/login" size="sm">Login</Button>
+    <!-- <Button href="/login" size="sm">Login</Button> -->
     {/if}
     <NavHamburger />
   </div>
@@ -36,16 +36,12 @@
     </form>
   </Dropdown>
   {/if}
-  
-  <NavUl {activeUrl} class="order-1">
-    <NavLi href="/">Home</NavLi>
-    <NavLi href="/favorites">Favorites</NavLi> 
-  </NavUl>
+ 
 </Navbar>
  
  
 <div class="py-4">
-  <div class="mx-auto max-w-7xl pt-4 px-5 sm:px-10 md:px-16">
+  <div class="mx-auto max-w-7xl mb-20 pt-4 px-5 sm:px-10 md:px-16">
     <slot />
   </div>
 </div>

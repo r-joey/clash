@@ -52,7 +52,7 @@ export const actions = {
 			}; 
 			const storage = new InMemoryDatabase()    
 			const manager = new BracketsManager(storage)  
-			console.log('creating stage') 
+			// console.log('creating stage') 
 			await manager.create.stage(config)
 			
 			const newStage = {

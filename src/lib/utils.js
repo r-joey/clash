@@ -1,5 +1,5 @@
-import { PUBLIC_POCKETBASE_URL } from '$env/static/public' 
-
+import { PUBLIC_POCKETBASE_URL } from '$env/static/public'  
+import games from './games.json';
 export const serializeNonPOJOs = (obj) => {
     return structuredClone(obj)
 }
@@ -35,7 +35,7 @@ export const  formBody = (body) => {
     }, {});
   }
 
-  export const isPowerOfTwo = (n) => {
+export const isPowerOfTwo = (n) => {
     // Check if n is zero or negative, which are not powers of 2
     console.log('powerof2 hit')
     if (n <= 0) {
@@ -44,4 +44,9 @@ export const  formBody = (body) => {
     // Check if n and n - 1 have any common bits using bitwise AND
     return (n & (n - 1)) === 0;
     }
+
+  export const getGameName = (key, defaultValue = 'Unknown game type') => { 
+    return games.hasOwnProperty(key) ? games[key] : defaultValue;
+  };
+  
   

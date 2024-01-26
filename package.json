@@ -10,6 +10,7 @@
   "devDependencies": {
     "@sveltejs/adapter-auto": "^2.0.0",
     "@sveltejs/kit": "^1.27.4",
+    "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tinymce/tinymce-svelte": "^2.0.0",
     "autoprefixer": "^10.4.14",
     "flowbite": "^2.2.0",
@@ -26,6 +27,7 @@
     "@jhubbardsf/svelte-sortablejs": "^1.1.0",
     "brackets-manager": "^1.6.4",
     "brackets-memory-db": "^1.0.4",
+    "get-youtube-id": "^1.0.1",
     "pocketbase": "^0.19.0",
     "svelte-french-toast": "^1.2.0"
   }

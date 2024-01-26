@@ -81,10 +81,6 @@
                 <Label>Name</Label>
                 <Input disabled={loading} type="text" name='name' required></Input>
                 
-            </div>
-            <div>
-                <Label>Social</Label>
-                <Input disabled={loading} type="text" name='social'></Input>
             </div> 
             <div class="sm:col-span-2">
                 <Label>Additional Information</Label>
@@ -121,16 +117,14 @@
 <Table>
     <TableHead> 
             <TableHeadCell>Profile picture</TableHeadCell>
-            <TableHeadCell>Name</TableHeadCell>
-            <TableHeadCell>Social</TableHeadCell>
+            <TableHeadCell>Name</TableHeadCell> 
             <TableHeadCell> </TableHeadCell>  
     </TableHead>
     <TableBody>
         {#each data.participants as participant} 
             <TableBodyRow>  
-                <TableBodyCell><Avatar src={participant?.profile_picture ? getImageURL(participant?.collectionId, participant?.id, participant?.profile_picture, "80x80") : `/PP.jpg`} /></TableBodyCell>
-                <TableBodyCell>{participant.name}</TableBodyCell>
-                <TableBodyCell><a target="_blank" class="underline text-orange-300" href={participant.social ?? ''}>social</a> </TableBodyCell>
+                <TableBodyCell><Avatar rounded src={participant?.profile_picture ? getImageURL(participant?.collectionId, participant?.id, participant?.profile_picture, "80x80") : `/PP.jpg`} /></TableBodyCell>
+                <TableBodyCell>{participant.name}</TableBodyCell> 
                 <TableBodyCell> 
                     <EditParticipantModal {disabled} {participant} />
                     <DeleteParticipantModal {disabled} {participant} />
