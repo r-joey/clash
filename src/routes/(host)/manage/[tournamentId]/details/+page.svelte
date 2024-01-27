@@ -67,7 +67,7 @@
     <!-- COVER START -->
   <div class="relative">
       <div class="rounded-lg overflow-hidden"> 
-          <img id="cover-preview" class="object-cover w-full" src={tournament.cover ? getImageURL(tournament.collectionId, tournament.id, tournament.cover, "0x0") : '/mlbb.jpg'} alt="">
+          <img id="cover-preview" class="object-cover w-full" src={tournament.cover ? getImageURL(tournament.collectionId, tournament.id, tournament.cover, "0x0") : '/default_cover.jpg'} alt="">
       </div> 
       <label for="cover">
           <span class="rounded-full absolute bottom-2 right-2 hover:cursor-pointer hover:bg-orange-500 px-4 py-2 hover:text-white text-orange-500 text-sm">

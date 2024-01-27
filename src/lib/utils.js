@@ -36,8 +36,7 @@ export const  formBody = (body) => {
   }
 
 export const isPowerOfTwo = (n) => {
-    // Check if n is zero or negative, which are not powers of 2
-    console.log('powerof2 hit')
+    // Check if n is zero or negative, which are not powers of 2 
     if (n <= 0) {
       return false;
     }

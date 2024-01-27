@@ -3,8 +3,9 @@
     import { onMount } from "svelte";
     import { getImageURL } from '$lib/utils';
     import {  helpers } from 'brackets-manager';
-    import { Badge, Indicator, Spinner, Radio, Modal, NumberInput, Label, Input, Button, Avatar, ButtonGroup, InputAddon, Textarea } from 'flowbite-svelte'
+    import { Badge, Modal, Button, Avatar, Textarea } from 'flowbite-svelte'
     import getYouTubeID from 'get-youtube-id';
+    import { BxsArchive, BxsCheckCircle, BxsStopwatch, BxsHourglass, BxsLock, BxLoader } from 'svelte-boxicons';
     const { stages } = data
     let selectedStage = null
     let matchModal = false
@@ -28,13 +29,11 @@
     }
 
     const gameClicked = (game) => { 
-      selectedGame = game; 
-      console.log(selectedGame) 
+      selectedGame = game;  
       winner = selectedGame?.opponent1?.result === 'win' ? 'opp1' : selectedGame?.opponent2?.result === 'win' ? 'opp2' : null
     }
 
-    const matchClicked = async (match) => {
-        console.log(match)
+    const matchClicked = async (match) => { 
         selectedMatch = match
         bracketsManager.import(selectedStage.data)
         const stageData = await bracketsManager.get.tournamentData(0)  
@@ -47,17 +46,21 @@
     }
 
     const renderBracket = (bracketsData) => { 
-      bracketsViewer.render({
-                    stages: bracketsData.stage,
-                    matches: bracketsData.match, 
-                    matchGames: bracketsData.match_game, 
-                    participants: bracketsData.participant, 
-                }, { 
-                    clear: true,
-                    onMatchClick: matchClicked,
-                    separatedChildCountLabel: true,
-                    highlightParticipantOnHover: true
-                });
+        bracketsViewer.setParticipantImages(bracketsData.participant.map((participant) => ({ 
+            participantId: participant.id,
+            imageUrl: participant?.profile_picture ? getImageURL(participant?.collectionId, participant?.id, participant?.profile_picture, "12x12") : `/PP.jpg`
+        })));
+        bracketsViewer.render({
+                        stages: bracketsData.stage,
+                        matches: bracketsData.match, 
+                        matchGames: bracketsData.match_game, 
+                        participants: bracketsData.participant, 
+                    }, { 
+                        clear: true,
+                        onMatchClick: matchClicked,
+                        separatedChildCountLabel: true,
+                        highlightParticipantOnHover: true
+                    });
     } 
  
 </script>
@@ -67,25 +70,41 @@
     <Button size="xs" color='light' on:click={()=>{selectedStage = stage}}>{stage.data.stage[0].name}</Button>
     {/each} 
 </div>
-
-<div class="brackets-viewer mt-2 rounded-md"></div> 
+ 
+<div id="bracket_viewer" class="brackets-viewer mt-3 rounded-md"></div> 
+ 
 
 <Modal size='md' bind:open={matchModal} outsideclose>  
-    {#if selectedGame?.vid_url}       
-    <div class="mt-7  aspect-w-16 aspect-h-9">
+    {#if getYouTubeID(selectedGame?.vid_url)}
+    <div class="mt-7 aspect-w-16 aspect-h-9">
         <iframe 
             class="rounded-md"
             src= {`https://www.youtube.com/embed/${getYouTubeID(selectedGame?.vid_url)}`}
-            title="(ENG) M5 World Championship | Grand Finals | ONIC vs APBR | Game 7" 
+            title="" 
             frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
             allowfullscreen>
         </iframe>
       </div>
     {/if}
       
-    <div class="flex flex-nowrap overflow-x-auto gap-3 items-center justify-start whitespace-nowrap">
+    <div class="mt-7 flex flex-nowrap overflow-x-auto gap-3 items-center justify-start whitespace-nowrap">
       {#each selectedMatch?.metadata?.games ?? [] as game}
-        <Button size="xs" outline = {selectedGame.id === game.id ? false : true} on:click={()=>gameClicked(game)} >Game {game.number}</Button>
+        <Button size="xs" outline = {selectedGame.id === game.id ? false : true} on:click={()=>gameClicked(game)}>
+            Game {game.number}
+            {#if game.status === 0}
+                <BxsLock class="ms-2" size='18'></BxsLock>
+            {:else if game.status === 1}
+                <BxsHourglass class="ms-2" size='18'></BxsHourglass>
+            {:else if game.status === 2}
+                <BxsStopwatch class="ms-2" size='18'></BxsStopwatch>
+            {:else if game.status === 3}
+                <BxLoader class="ms-2" size='18'></BxLoader>
+            {:else if game.status === 4}
+                <BxsCheckCircle class="ms-2" size='18'></BxsCheckCircle>
+            {:else if game.status === 5}
+                <BxsArchive class="ms-2" size='18'></BxsArchive>
+            {/if}
+        </Button>
       {/each}
     </div>  
     <div class="grid grid-cols-7">  
@@ -134,5 +153,57 @@
     </div> 
     <div>   
     <Textarea value={selectedGame.additional_information ?? ''} rows="5" disabled/>
-    </div>  
+    </div> 
+    <div class="flex justify-between">
+        <div class="flex justify-center items-center"> 
+           <BxsLock class="me-1" size='18'></BxsLock> 
+           <p>Locked</p>
+        </div>
+        <div class="flex justify-center items-center"> 
+          <BxsHourglass class="me-1" size='18'></BxsHourglass> 
+          <p>Waiting</p>
+        </div>
+        <div class="flex justify-center items-center"> 
+          <BxsStopwatch class="me-1" size='18'></BxsStopwatch> 
+          <p>Ready</p>
+        </div>
+        <div class="flex justify-center items-center"> 
+          <BxLoader class="me-1" size='18'></BxLoader> 
+          <p>Running</p>
+        </div>
+        <div class="flex justify-center items-center"> 
+          <BxsCheckCircle class="me-1" size='18'></BxsCheckCircle> 
+          <p>Completed</p>
+        </div>
+        <div class="flex justify-center items-center"> 
+          <BxsArchive class="me-1" size='18'></BxsArchive> 
+          <p>Archived</p>
+        </div>
+      </div> 
   </Modal>
+<style>
+    .brackets-viewer {
+  /* Colors */
+  /* --primary-background: rgb(17 24 39);
+  --secondary-background: rgb(31 41 55);
+  --match-background: rgb(63, 77, 97);
+  --font-color: #d9d9d9;
+  --win-color: #50b649;
+  --loss-color: #e61a1a;
+  --label-color: grey;
+  --hint-color: #a7a7a7;
+  --connector-color: rgb(63, 77, 97);
+  --border-color: var(--primary-background);
+  --border-hover-color:  rgb(249 115 22); */
+
+  /* Sizes */
+  --text-size: 14px;
+  --round-margin: 50px;
+  --match-width: 200px;
+  --match-horizontal-padding: 10px;
+  --match-vertical-padding: 10px;
+  --connector-border-width: 3px;
+  --match-border-width: 1px;
+  --match-border-radius: 0.5em;
+}
+</style>

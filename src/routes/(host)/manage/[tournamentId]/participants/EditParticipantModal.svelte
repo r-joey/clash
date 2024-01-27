@@ -55,7 +55,7 @@
     <!-- Participant Cover  START-->
     <div class="relative items-center">
         <div class="overflow-hidden flex justify-center items-center"> 
-            <img id="profile_picture-preview" class="h-72 w-72 rounded-full object-cover" src={participant?.profile_picture ? getImageURL(participant?.collectionId, participant?.id, participant?.profile_picture, '0x0') : `/PP.jpg`} alt="">
+            <img id="profile_picture-preview" class="h-72 w-72 rounded-md object-cover" src={participant?.profile_picture ? getImageURL(participant?.collectionId, participant?.id, participant?.profile_picture, '0x0') : `/PP.jpg`} alt="">
         </div> 
         <label disabled={disabled} for="profile_picture">
             <span class="absolute bottom-2 right-2 hover:cursor-pointer px-4 py-2 hover:text-white text-orange-500 text-sm">

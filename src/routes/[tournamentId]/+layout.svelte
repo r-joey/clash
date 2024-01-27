@@ -12,9 +12,11 @@
         {title: 'Awards', href: `/${tournament.id}/awards`}
     ] 
 </script> 
+{#if tournament.cover}    
 <div class="rounded-lg overflow-hidden"> 
-    <img id="cover-preview" class="object-cover w-full" src={tournament.cover ? getImageURL(tournament.collectionId, tournament.id, tournament.cover, "0x0") : '/mlbb.jpg'} alt="clash">
+    <img id="cover-preview" class="object-cover w-full" src={tournament.cover ? getImageURL(tournament.collectionId, tournament.id, tournament.cover, "0x0") : '/default_cover'} alt="clash">
 </div>    
+{/if}
 
 <div class="text-center mt-2">
     <Heading tag="h4" customSize="text-lg font-extrabold ">{tournament.name}</Heading>

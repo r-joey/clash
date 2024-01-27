@@ -64,7 +64,7 @@
         <!-- Participant Cover  START-->
         <div class="relative items-center">
             <div class="overflow-hidden flex justify-center items-center"> 
-                <img id="profile_picture-preview" class="h-72 w-72 rounded-full object-cover" src={'/PP.jpg'} alt="">
+                <img id="profile_picture-preview" class="h-72 w-72 rounded-md object-cover" src={'/PP.jpg'} alt="">
             </div> 
             <label for="profile_picture">
                 <span class="absolute bottom-2 right-2 hover:cursor-pointer px-4 py-2 hover:text-white text-orange-500 text-sm">
@@ -76,7 +76,7 @@
         
         <!-- Participant Cover  END-->
         <div class="mt-4 grid gap-4 mb-4 sm:grid-cols-2">
-            <div>
+            <div class="sm:col-span-2">
                 <Label>Name</Label>
                 <Input disabled={loading} type="text" name='name' required></Input>
                 

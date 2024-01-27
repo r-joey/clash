@@ -2,11 +2,12 @@
     export let data
     import { enhance } from '$app/forms'; 
     import toast from 'svelte-french-toast';
-    import { Heading, List, Li, Select, Button, Hr, Modal, Spinner } from 'flowbite-svelte';
-    import { ExclamationCircleOutline } from 'flowbite-svelte-icons';
+    import { page } from '$app/stores'; 
+    import { Heading, List, Li, Select, Button, Hr, Modal, Spinner, Input, ButtonGroup} from 'flowbite-svelte';
+    import { ExclamationCircleOutline, ShareAllOutline, CopySolid } from 'flowbite-svelte-icons';
     let deleteTournamentModal = false;
     let loading = false;   
-     
+    const shareable_url  = `${$page.url.origin}/${$page.params.tournamentId}`
     let statuses = [
           { value: 'Preparation', name: 'Preparation' },
           { value: 'In progress', name: 'In progress' },
@@ -31,14 +32,49 @@
         loading = false; 
         };
     }; 
+    const copyToClipboard = async () => {
+        try { 
+            await navigator.clipboard.writeText(shareable_url);
+            toast.success('Shareable URL copied to clipboard')
+        } catch (error) {
+            toast.error('Something went wrong while copying shareable URL.')
+        }
+    };
+
+    const share = async () => {
+        try {
+            await navigator.share({url:shareable_url}); 
+        } catch (error) {
+            toast.error('Something went wrong while sharing shareable URL.')
+        }
+    }
 </script>
 <div class="space-y-20">
     <div>
+        <div class="mb-16 text-center">
+            <Hr classHr="my-8 w-full"><p class="text-red-500">Share</p></Hr>
+            <div class="flex items-center justify-center">
+                <ButtonGroup class="w-96"> 
+                    <Input value={shareable_url} disabled id="input-addon" type="text" placeholder="elonmusk" />
+                    <Button on:click={copyToClipboard} color="primary">
+                        <CopySolid class="me-2" ></CopySolid>
+                        Copy
+                    </Button>
+                    <Button on:click={share} outline color="primary">
+                        <ShareAllOutline class='me-2'></ShareAllOutline>
+                        Share 
+                    </Button>
+                </ButtonGroup> 
+            </div> 
+        </div> 
         <Hr classHr="my-8 w-full"><p class="text-red-500">Status</p></Hr>
         <div class="flex flex-col items-center">  
-                <form class="flex w-52 gap-2" action="?/updateStatus" method="POST" use:enhance={handleUpdateStatus}> 
-                    <Select name="status" items={statuses} value={data?.tournament?.status ?? null} />  
-                    <Button color="primary"  type="submit">
+                <form class="flex  gap-2" action="?/updateStatus" method="POST" use:enhance={handleUpdateStatus}> 
+                    <Select disabled={loading} name="status" items={statuses} value={data?.tournament?.status ?? null} />  
+                    <Button disabled={loading} color="primary"  type="submit">
+                        {#if loading} 
+                            <Spinner class="me-3" size="4" color="white" /> 
+                        {/if} 
                         Save
                     </Button> 
                 </form> 
