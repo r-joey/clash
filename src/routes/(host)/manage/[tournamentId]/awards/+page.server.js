@@ -17,7 +17,7 @@ export async function load({locals, params}) {
         throw error(err.status, err.message)
     } 
 }
- 
+  
 export const actions = {
     createAward : async ({ request, locals, params }) => { 
 		let tournament = null
