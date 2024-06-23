@@ -16,8 +16,7 @@ export const handle = async ({event, resolve}) => {
         event.locals.user = undefined
     } 
 
-    const response = await resolve(event)
-    // TODO: Secure before deployment
+    const response = await resolve(event) 
     response.headers.set('set-cookie', event.locals.pb.authStore.exportToCookie({secure: true}))
     
     return response
